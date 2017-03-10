@@ -1,0 +1,47 @@
+<%- include extend/header_device.ejs %>
+	<table id="table1"  class="display" cellspacing="0" width="100%">
+		<thead>
+            <tr style="color:#428bca">
+            <th>Item</th>
+            <th>Receive time</th>
+            <th>Data</th>
+            <th>Trigger</th>
+            <th>UL Rss</th>
+            <th>UL SNR</th>
+            <th>UL SF</th>
+            <th>Channel</th>
+            <th>ApId</th>
+			<th>FrameCnt</th>
+            </tr>
+        </thead>
+
+
+	<% if(devices != null && devices.length >0){ %>
+
+		<tbody>
+			<% for(var i=0;i<devices.length ;i++){ %>
+				<tr>
+					<td><%= i%></td>
+					<td><%= devices[i].date%></td>
+					<td><%= devices[i].data%></td>
+					<% if(devices[i].info){ %>
+						<td><%= devices[i].info.trigger%></td>
+					<% }else{ %>
+						<td>X</td>
+					<% } %>
+					<td><%= devices[i].extra.rssi%></td>
+					<td><%= devices[i].extra.snr%></td>
+					<td><%= devices[i].extra.sf%></td>
+					<td><%= devices[i].extra.channel%></td>
+					<td><%= devices[i].extra.gwid%></td>
+					<td><%= devices[i].extra.frameCnt%></td>
+				</tr>
+			<% } %>
+
+		</tbody>
+	</table>
+
+	<% } %>
+
+	</table>
+<%- include extend/footer %>

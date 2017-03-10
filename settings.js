@@ -10,5 +10,6 @@ module.exports = {
   client_Id: '200000206-generic-service',
   name: '200000206',
   pw: '02259101',
-  gIoTopic:'client/200000206/200000206-GIOT-MAKER'
+  gIoTopic:'client/200000206/200000206-GIOT-MAKER',
+  hour : 60*60*1000
 };

@@ -2,7 +2,11 @@ var express = require('express');
 var router = express.Router();
 //var UnitDbTools = require('../models/unitDbTools.js');
 var DeviceDbTools = require('../models/deviceDbTools.js');
+var JsonFileTools =  require('../models/jsonFileTools.js');
+var ListDbTools = require('../models/listDbTools.js');
 var moment = require('moment');
+var typepPath = './public/data/test.json';
+var hour = 60*60*1000;
 
 router.route('/devices')
 
@@ -72,6 +76,58 @@ router.route('/devices/:mac')
 
 			res.json({ message: 'Successfully deleted' });
 		});*/
+	});
+
+router.route('/lists')
+
+	// get all the bears (accessed at GET http://localhost:8080/api/bears)
+	.get(function(req, res) {
+		var name    = req.query.name;
+		var type    = req.query.type;
+		var json    = {type:req.query.type};
+		var now = new Date().getTime();
+		
+		JsonFileTools.saveJsonToFile(typepPath,json);
+
+		ListDbTools.findByName('finalist',function(err,lists){
+			if (err)
+				return res.send(err);
+			if(lists.length>0 ){
+				if(type){
+					var finalList = lists[0]['list'][type];
+				}else{
+					var finalList = lists[0]['list'];
+				}
+				
+				if(finalList === undefined ){
+					finalList = null;
+				}else{
+					var overtime = 1;
+					if(type==='pir'){
+						overtime = 6;
+					} else if(type==='flood'){
+						overtime = 8;
+					}
+					console.log('finalList :'+JSON.stringify(finalList));
+
+					var keys = Object.keys(finalList);
+
+					for(var i=0;i<keys.length ;i++){
+						//console.log(i+' timestamp : '+ finalList[keys[i]].timestamp);
+						//console.log(i+' result : '+ ((now - finalList[keys[i]].timestamp)/hour));
+						finalList[keys[i]].overtime = true;
+						if( ((now - finalList[keys[i]].timestamp)/hour) < overtime )  {
+							finalList[keys[i]].overtime = false;
+						}
+					}
+				}
+				return res.json(finalList);
+
+			}else{
+				return res.json({});
+			}
+			
+		});
 	});
 
 module.exports = router;

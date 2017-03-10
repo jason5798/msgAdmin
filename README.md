@@ -5,7 +5,7 @@ A MQTT message tool for data manager.
 ## Quick Start
 
 1. `cd msgAdmin
-2. `sudo npm install
+2. `npm install
 3. index <http://localhost:3000>
 4. node-red <http://localhost:3000/red>
 

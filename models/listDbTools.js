@@ -45,10 +45,10 @@ function toFindByName(find_name,callback){
                     return callback(err);
                 }
                 var now = moment().format('YYYY-MM-DD HH:mm:ss');
-                console.log("find all of mac "+find_name+" : "+lists);
-                lists.forEach(function(list) {
+                //console.log("find all of name "+find_name+" : "+lists);
+                /*lists.forEach(function(list) {
                     console.log('name:'+list.name + ', data :' +list.list);
-                });
+                });*/
 
                 if (lists.length>0) {
                     console.log(now+' findByName() : '+lists.length+' records');

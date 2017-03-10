@@ -161,7 +161,7 @@ exports.findDevicesByDate = function (dateStr,mac,dateOption,order,calllback) {
         from =  moment(testDate).subtract(3,'months').toDate();
         break;
     default:
-        from =  moment(testDate).subtract(3,'months').toDate();
+        from =  moment(testDate).subtract(3,'days').toDate();
     }
     console.log( 'now :'+now );
     console.log( 'from :'+from );

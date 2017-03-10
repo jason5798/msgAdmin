@@ -89,6 +89,10 @@ exports.saveFinalListToFile = function () {
     JsonFileTools.saveJsonToFile(path,finalList);
 }
 
+exports.getFinalData = function (finalList) {
+    return ParseBlaziong.getTableData(finalList);
+}
+
 function saveBlazingList(fport,mac,msg){
     var key = "gps";
     delete msg.information;
