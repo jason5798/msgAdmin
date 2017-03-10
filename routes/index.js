@@ -36,7 +36,7 @@ module.exports = function(app) {
 					var keys = Object.keys(finalList);
 					console.log('Index finalList :'+keys.length);
 					for(var i=0;i<keys.length ;i++){
-						//console.log(i+' timestamp : '+ finalList[keys[i]].timestamp);
+						console.log( i + ') mac : ' + keys[i] +'=>' + JSON.stringify(finalList[keys[i]]));
 						//console.log(i+' result : '+ ((now - finalList[keys[i]].timestamp)/hour));
 						finalList[keys[i]].overtime = true;
 						if( ((now - finalList[keys[i]].timestamp)/hour) < 1 )  {
@@ -68,9 +68,9 @@ module.exports = function(app) {
 			return;
 		}
 
-		devices.forEach(function(device) {
+		/*devices.forEach(function(device) {
 			console.log('mac:'+device.date + ', data :' +device.data);
-		});
+		});*/
 
 		res.render('devices', { title: '裝置',
 			devices: devices,

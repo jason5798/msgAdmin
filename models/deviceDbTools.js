@@ -9,7 +9,7 @@ exports.saveDeviceMsg = function (obj,callback) {
     var now = moment().toDate();
     //console.log(now + ' Debug : saveDeviceMsg obj:'+JSON.stringify(obj));
 
-    var newDevice = new DeviceModel({     
+    var newDevice = new DeviceModel({
         macAddr     : obj.mac,
         data        : obj.data,
         recv        : obj.recv,
@@ -135,61 +135,64 @@ exports.findLastDevice = function (json,calllback) {
 *date option: 0:one days 1:one weeks 2:one months 3:three months
 */
 exports.findDevicesByDate = function (dateStr,mac,dateOption,order,calllback) {
+    
+    var json = {macAddr:mac};
+    return toFindDevice(dateStr,json,dateOption,order,calllback);
+   
+};
+
+exports.findDevicesByGWID = function (dateStr,gwid,dateOption,order,calllback) {
+    
+    var json = {"extra.gwid":gwid};
+    return toFindDevice(dateStr,json,dateOption,order,calllback);
+   
+};
+
+function toFindDevice(dateStr,json,dateOption,order,calllback) {
     console.log(moment().format('YYYY-MM-DD HH:mm:ss')+' Debug : findDevicesByDate()');
-    console.log('-mac : '+mac);
-    /*var testDate = moment().format('YYYY-MM-DD');
-    if(dateStr && dateStr == testDate){
-        testDate = testTime;
-    }else{
-        testDate = moment(dateStr).add(1,'days').toDate();
-    }*/
-    testDate = moment(dateStr).add(1,'days').toDate();
-    var now = moment(testDate).toDate();
+    console.log(JSON.stringify(json));
+    testDate = moment(dateStr,'YYYY/MM/DD').add(1,'days').toDate();
+    var toMoment = moment(testDate);
+    var to = toMoment.toDate();
 
     var from;
     switch(dateOption) {
     case 0:
-        from =  moment(testDate).subtract(1,'days').toDate();
+        from =  toMoment.subtract(1,'days').toDate();
         break;
     case 1:
-        from =  moment(testDate).subtract(1,'weeks').toDate();
+        from =  toMoment.subtract(1,'weeks').toDate();
         break;
     case 2:
-        from =  moment(testDate).subtract(1,'months').toDate();
+        from =  toMoment.subtract(1,'months').toDate();
         break;
     case 3:
-        from =  moment(testDate).subtract(3,'months').toDate();
+        from =  toMoment.subtract(3,'months').toDate();
         break;
     default:
-        from =  moment(testDate).subtract(3,'days').toDate();
+        from =  toMoment.subtract(3,'days').toDate();
     }
-    console.log( 'now :'+now );
+    console.log( 'to :'+to );
     console.log( 'from :'+from );
+    
+    json.recv = {$gte:from, $lt:to};
 
-    var json = {macAddr:mac,
-                recv:{
-                    $gte:from,
-                    $lt:now
-                }
-        }
+    var recvOrder = -1;
+    if(order === 'asc'){
+        recvOrder = 1;
+    }
 
-
-    DeviceModel.find(json,(err, Devices) => {
+    DeviceModel.find(json).sort({ recv:recvOrder}).exec(function(err, Devices){
+        console.log('Debug :Devices count:',Devices.length);
+        console.log('Debug :first\n:',Devices[0]['date']);
+        console.log('Debug :first\n:',Devices[Devices.length-1]['date']);
         if (err) {
             console.log('Debug : findDevice err:', err);
             return calllback(err);
-        } else {
-            console.log('Debug :findDevice success\n:',Devices.length);
-            var mDevices = [];
-            if(order == 'asc' && Devices.length>0){
-               for(var i= (Devices.length-1);i>-1 ;i--){
-                   mDevices.push(Devices[i]);
-               }
-               return calllback(err,mDevices);
-            }
-            return calllback(err,Devices);
         }
+        return calllback(err,Devices);
     });
+   
 };
 
 exports.getOptioDeviceList = function (devices,option) {

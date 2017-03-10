@@ -20,7 +20,7 @@ console.log("Node admin device information");
                     ]
            };
       var opt2={
-          "order": [[ 2, "desc" ]],
+          //"order": [[ 2, "desc" ]],
           "iDisplayLength": 100,
           dom: 'Blrtip',
           buttons: [
@@ -127,12 +127,17 @@ console.log("Node admin device information");
           waitingDialog.show();
           setTimeout(function () {
             waitingDialog.hide();
-            }, 10000);
+            }, 2000);
+      }
+
+      function back(){
+          //alert('back');
+          location.href=document.referrer;
       }
 
 
       $(document).ready(function(){
-          //showDialog();
+          showDialog();
           table = $("#table1").dataTable(opt2);
 
           table.$('tr').click(function() {
