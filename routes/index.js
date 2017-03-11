@@ -67,6 +67,10 @@ module.exports = function(app) {
 			console.log('find name:'+find_mac);
 			return;
 		}
+		var length = 20;
+		if(devices.length<length){
+			length = devices.length;
+		}
 
 		/*devices.forEach(function(device) {
 			console.log('mac:'+device.date + ', data :' +device.data);
@@ -77,11 +81,14 @@ module.exports = function(app) {
 			success: req.flash('success').toString(),
 			error: req.flash('error').toString(),
 			type:type,
-			mac:mac
+			mac:mac,
+			date:date,
+			option:option,
+			length:length
 		});
 	});
   });
-  
+
   app.get('/find', function (req, res) {
 	var testObj = JsonFileTools.getJsonFromFile(path2);
 	test = testObj.test;

@@ -149,7 +149,7 @@ $(document).ready(function(){
     });
 
     document.getElementById("date").value = date;
-      table = $("#table1").dataTable(opt2);
+      //table = $("#table1").dataTable(opt2);
 
           table.$('tr').click(function() {
               var row=table.fnGetData(this);

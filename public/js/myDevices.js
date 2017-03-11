@@ -1,4 +1,4 @@
-console.log("Node admin device information");
+console.log("Message admin device information");
       var connected = false;
       var opt={"oLanguage":{"sProcessing":"處理中...",
                   "sLengthMenu":"顯示 _MENU_ 項結果",
@@ -33,9 +33,9 @@ console.log("Node admin device information");
       var table = $('#table1').dataTable(opt2);
 
       if(location.protocol=="https:"){
-        var wsUri="wss://"+window.location.hostname+":1880/ws/devices";
+        var wsUri="wss://"+window.location.hostname+":"+window.location.port+"/ws/devices";
       } else {
-        var wsUri="ws://"+window.location.hostname+":1880/ws/devices";
+        var wsUri="ws://"+window.location.hostname+":"+window.location.port+"/ws/devices";
       }
       var ws=null;
 
@@ -46,7 +46,7 @@ console.log("Node admin device information");
           if (typeof(m.data) === "string" && m. data !== null){
             var msg =JSON.parse(m.data);
             console.log("from-node-red : id:"+msg.id);
-            if(msg.id === 'change_table'){
+            if(msg.id === 'init_table'){
                 //Remove init button active
                 console.log("v : "+msg.v);
 
@@ -55,29 +55,25 @@ console.log("Node admin device information");
 
                 table.fnClearTable();
                 var data = JSON.parse(msg.v);
-                /*console.log("addData type : "+ typeof(data)+" : "+data);
+                console.log("addData type : "+ typeof(data)+" : "+data);
                 if(data){
                     table.fnAddData(data);
-                    table.$('tr').click(function() {
-                    var row=table.fnGetData(this);
-                        toSecondTable(row[1]);
-                    });
                 }
-                waitingDialog.hide();*/
-            }else if(msg.id === 'init_btn'){
-                //Set init button active
-                console.log("type:"+typeof(msg.v)+" = "+ msg.v);
-                type = msg.v;
-              }
+                waitingDialog.hide();
+            }
           }
         }
         ws.onopen = function() {
-          var type ='{{{payload.type}}}';
-          var mac  ='{{{payload.mac}}}';
-          var date  ='{{{payload.date}}}';
+          var mac = document.getElementById("mac").value;
+          var type = document.getElementById("type").value;
+          var date = document.getElementById("date").value;
+          var option= document.getElementById("option").value;
+          var host = window.location.hostname;
+          var port = window.location.port;
+          var json = {mac:mac,type:type,date:date,option:option,host:host,port:port};
           //alert('date :'+ date);
           connected = true;
-          var obj = {"id":"init","v":{type:type,mac:mac,date:date}};
+          var obj = {"id":"init","v":json};
           var getRequest = JSON.stringify(obj);
           console.log("getRequest type : "+ typeof(getRequest)+" : "+getRequest);
           console.log("ws.onopen : "+ getRequest);
@@ -102,21 +98,6 @@ console.log("Node admin device information");
          myselect.slider('refresh');
       }
 
-      function myFunction(id){  // update device
-        console.log(id);
-        if(ws){
-            console.log("ws.onopen OK ");
-        }
-        //console.log("id type : "+ typeof(id)+" : "+id);
-        var obj = {"id":"change_type","v":id};
-        var objString = JSON.stringify(obj);
-        //console.log("getRequest type : "+ typeof(objString)+" : "+objString);
-        //console.log("ws.onopen : "+ objString);
-        ws.send(objString);     // Request ui status from NR
-        console.log("sent change_type requeset");
-
-      }
-
       function toSecondTable(mac){
           //alert("mac : "+mac);
           //document.location.href="/device?mac="+mac;
@@ -127,7 +108,7 @@ console.log("Node admin device information");
           waitingDialog.show();
           setTimeout(function () {
             waitingDialog.hide();
-            }, 2000);
+            }, 1000);
       }
 
       function back(){
@@ -138,13 +119,14 @@ console.log("Node admin device information");
 
       $(document).ready(function(){
           showDialog();
-          table = $("#table1").dataTable(opt2);
+
 
           table.$('tr').click(function() {
               var row=table.fnGetData(this);
               toSecondTable(row[1]);
 
           });
+
 
           //$("#table1").dataTable(opt); //中文化
 

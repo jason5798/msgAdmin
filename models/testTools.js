@@ -10,7 +10,7 @@ exports.mqttTest = function () {
     //var msgObj = {"id":"641e95a2-df04-4f09-954a-412a7dfbe933","macAddr":"040004b8","data":"aa012003feffaf135000b7","buff":"2017-02-13T03:09:57.694Z","recv":"2017-02-13T03:09:57.000Z","extra":{"gwip":"134.208.228.18","gwid":"00001c497b431f8e","repeater":"00000000ffffffff","systype":4,"rssi":-107,"snr":12}};
     //var msgObj = {"id":"3b78deab-bf67-44bd-a243-7507cdbbf437","macAddr":"040004b8","data":"aa0221000903f7","buff":"2017-02-13T03:13:34.336Z","recv":"2017-02-13T03:13:34.000Z","extra":{"gwip":"134.208.228.18","gwid":"00001c497b431f8e","repeater":"00000000ffffffff","systype":4,"rssi":-109,"snr":14.5}};
     console.log('msgObj.recv : '+ msgObj.recv);
-     
+
     //To determine whether the timeout
     if(MsgTools.parseMsg(msgObj) === null){
         return;
@@ -31,7 +31,7 @@ exports.dbtest = function (macAddress,data,recv,callback) {
             console.log(err);
         }
         for(var i = 0; i < devices.length; i++){
-            
+
             if(devices[i].info == null){
                 console.log('devices ('+i+'): '+devices[i]);
                 console.log('info : '+devices[i].info);

@@ -125,55 +125,5 @@ exports.getFlood = function (raw) {
     return ret;
 };
 
-exports.getTableData = function (finalist) {
-    var mItem = 1;
-    var array = [];
-    if(finalist){
 
-        //console.log( 'Last Device Information \n '+JSON.stringify( mObj));
-
-        for (var mac in finalist)
-        {
-            //console.log( '#### '+mac + ': ' + JSON.stringify(finalist[mac]) );
-
-            array.push(getArray(finalist[mac],mItem));
-            mItem++;
-        }
-    }
-
-    var dataString = JSON.stringify(array);
-    if(array.length===0){
-        dataString = null;
-    }
-    return dataString;
-};
-
-function getArray(obj,item){
-
-    var arr = [];
-    var connection_ok = "<img src='/icons/connection_ok.png' width='30' height='30' name='status'>";
-    var connection_fail = "<img src='/icons/connection_fail.png' width='30' height='30' name='status'>";
-    if(item<10){
-        arr.push('0'+item);
-    }else{
-        arr.push(item.toString());
-    }
-
-    arr.push(obj.mac);
-    arr.push(obj.date);
-    arr.push(obj.extra.rssi);
-    arr.push(obj.extra.snr);
-    console.log('obj.overtime :'+obj.overtime);
-
-
-    if( obj.overtime){
-        arr.push(connection_fail);
-        //console.log('overtime = true');
-    }else{
-        arr.push(connection_ok);
-        //console.log('overtime = false');
-    }
-    //console.log('arr = '+JSON.stringify(arr));
-    return arr;
-}
 //Parse data ------------------------------------end
