@@ -2,6 +2,8 @@ console.log("Message admin device information");
 var connected = false;
 var now = new Date();
 var date = (now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate() );
+var host = window.location.hostname;
+var port = window.location.port;
 var opt2={
     //"order": [[ 2, "desc" ]],
     "iDisplayLength": 100,
@@ -16,9 +18,9 @@ var opt2={
 var table = $('#table1').dataTable(opt2);
 
 if(location.protocol=="https:"){
-  var wsUri="wss://"+window.location.hostname+":"+window.location.port+"/ws/gateway";
+  var wsUri="wss://"+host+":"+port+"/ws/gateway";
 } else {
-  var wsUri="ws://"+window.location.hostname+":"+window.location.port+"/ws/gateway";
+  var wsUri="ws://"+host+":"+port+"/ws/gateway";
 }
 var ws=null;
 
@@ -126,6 +128,31 @@ function back(){
     location.href=document.referrer;
 }
 
+function find() {
+    showDialog();
+    var mac = document.getElementById("selected_mac").value;
+    var option = document.getElementById("time_option").value;
+    var date = document.getElementById("date").value;
+    //alert('mac :'+mac +', option : '+option +' , data : '+date);
+    if(ws){
+        console.log("ws.onopen OK ");
+    }
+    var value = {};
+    value.mac= mac;
+    value.option= option;
+    value.date= date;
+    value.host= host;
+    value.port= port;
+    var mValue = JSON.stringify(value);
+    //console.log("id type : "+ typeof(id)+" : "+id);
+    var obj = {"id":"find","v":value};
+    var objString = JSON.stringify(obj);
+    //console.log("getRequest type : "+ typeof(objString)+" : "+objString);
+    console.log("ws.onopen : "+ objString);
+    ws.send(objString);     // Request ui status from NR
+    console.log("sent find WS");
+}
+
 
 $(document).ready(function(){
     highlight('gateway');
@@ -138,6 +165,16 @@ $(document).ready(function(){
         var row=table.fnGetData(this);
         toSecondTable(row[1]);
 
+    });
+
+    new Calendar({
+        inputField: "date",
+        dateFormat: "%Y/%m/%d",
+        trigger: "BTN",
+        bottomBar: true,
+        weekNumbers: true,
+        showTime: false,
+        onSelect: function() {this.hide();}
     });
 
 

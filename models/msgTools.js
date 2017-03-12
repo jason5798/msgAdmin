@@ -6,22 +6,6 @@ var listDbTools =  require('./listDbTools.js');
 var settings =  require('../settings.js');
 var mData,mMac,mRecv,mDate,mTimestamp,mType,mExtra ;
 var obj;
-<<<<<<< HEAD
-=======
-var path = './public/data/finalList.json';
-var finalList = {};
-var macGwIdMapList={"1c:49:7b:5f:d7:e2":["00001c497b5eeeff","00001c497b5eeefc"],
-                    "1c:49:7b:49:8d:58":["00001c497b48dbc8","00001c497b48dbcb"],
-                    "1c:49:7b:43:22:9c":["00001c497b4320bc","00001c497b43202a"],
-                    "1c:49:7b:43:22:d4":["00001c497b43211b","00001c497b43211a"],
-                    "1c:49:7b:43:23:32":["00001c497b431f0d","00001c497b431ff4"],
-                    "1c:49:7b:43:21:78":["00001c497b431ee6","00001c497b431ee2"],
-                    "1c:49:7b:43:21:f8":["00001c497b431f1a","00001c497b431fdf"],
-                    "1c:49:7b:88:cb:98":["00001c497b88cf67","00001c497b88cf63"],
-                    "1c:49:7b:88:cd:10":["00001c497b88cefa","00001c497b88cef9"],
-                    "1c:49:7b:88:cd:70":["00001c497b88cee8","00001c497b88cee3"]};
-var gwIdMacMapList={};
->>>>>>> origin/master
 var overtime = 24;
 var hour = 60*60*1000;
 var isNeedGWMac = settings.isNeedGWMac;//For blazing
@@ -45,22 +29,6 @@ function init(){
             return;
         finalList = lists[0].list;
     });
-    /*listDbTools.findByName('macGwIdMapList',function(err,lists){
-        if(err)
-            return;
-        macGwIdMapList = lists[0].list;
-    });*/
-    gwIdMacMapList = getMapList(macGwIdMapList);
-}
-
-function getMapList(list){
-    var keys = Object.keys(list);
-    var json = {};
-    for(key in list){
-       json[list[key][0]]=key ;
-       json[list[key][1]]=key ;
-    }
-    return json;
 }
 
 function initMap(){
@@ -154,9 +122,26 @@ exports.saveFinalListToFile = function () {
     JsonFileTools.saveJsonToFile(path,finalList);
 }
 
+exports.getMacGwIdMap = function () {
+    return macGwIdMapList;
+}
+
+exports.saveMacGwIdMapToFile = function () {
+
+    JsonFileTools.saveJsonToFile(path2,finalList);
+}
+
+exports.getGwIdByMac = function (mac) {
+    selectMac = mac;
+    if(macGwIdMapList === undefined){
+        initMap();
+    }
+    return macGwIdMapList[mac];
+}
+
+
 exports.getDevicesData = function (type,devices) {
     var array = [];
-<<<<<<< HEAD
     if(isNeedGWMac){
         //For blazing
         if(gwIdMacMapList === undefined || gwIdMacMapList === null){
@@ -164,17 +149,11 @@ exports.getDevicesData = function (type,devices) {
         }
     }
 
-=======
->>>>>>> origin/master
     if(devices){
         for (var i=0;i<devices.length;i++)
         {
             //if(i==53){
-<<<<<<< HEAD
               //console.log( '#### '+devices[i].mac + ': ' + JSON.stringify(devices[i]) );
-=======
-              //console.log( '#### '+devices[i].mac + ': ' + JSON.stringify(devices[i]) ); 
->>>>>>> origin/master
             //}
             array.push(getDevicesArray(devices[i],i,type));
         }
@@ -190,11 +169,7 @@ exports.getDevicesData = function (type,devices) {
 function getDevicesArray(obj,item,type){
 
     var arr = [];
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> origin/master
     arr.push(item);
     arr.push(obj.date);
     arr.push(obj.data);
@@ -248,11 +223,7 @@ function getDevicesArray(obj,item,type){
     }else{
         if(type == 'pir'){
             arr.push('X');
-<<<<<<< HEAD
         } else if(type != 'others') {
-=======
-        } else {
->>>>>>> origin/master
             arr.push('X');
             arr.push('X');
         }
@@ -263,10 +234,7 @@ function getDevicesArray(obj,item,type){
     arr.push(obj.extra.sf);
     arr.push(obj.extra.channel);
     arr.push(obj.extra.gwid);
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/master
     var gwMac =  gwIdMacMapList[obj.extra.gwid];
     if(gwMac!= undefined){
         arr.push(gwMac);

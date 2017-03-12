@@ -72,16 +72,75 @@
         <div id="page-wrapper" >
           <div id="page-inner">
              <div class="row">
-                <div >
-                  <div class="col-md-3">
+                <div class="col-md-12">
+                  <div class="col-md-12">
                       <img src="/icons/Logo1n.png" class="center-block logoStyle"/>
                         &nbsp<br>
-                      <div class="col-md-12" style="margin-top: -20px;">
-                        <label>Start Date</label>
-                        <input type="text" id="date" name="date" size="10" readonly>
-                        <input type="button" value="..." id="BTN" name="BTN">
+
                     </div>
+                  </div>
+                  <div class="col-md-3">
+                      <label>Select Date</label>
+                      <input type="text" id="date" name="date" size="10" readonly>
+                      <input type="button" value="..." id="BTN" name="BTN">
                   </div>
 
 
-            <div class="col-md-12 column" style="margin-top: 10px;">
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>Select GW Mac</label>
+                      <select id="selected_mac" name="mac">
+                        <% if(macList) { %>
+                          <% for(var i=0;i<macList.length;i++){ %>
+                            <% if(i==0){ %>
+                              <option value = "<%= macList[i] %>" selected>
+                            <% }else{ %>
+                              <option value = "<%= macList[i] %>" >
+                            <% } %>
+
+                            &nbsp&nbsp<%= macList[i] %>&nbsp&nbsp&nbsp&nbsp&nbsp
+                            </option>
+                          <% } %>
+
+                        <% } %>
+                      </select>
+                    </div> <!-- form-group -->
+                  </div> <!-- col-md-3 -->
+
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>Select Range</label>
+                      <select "selected_time" id="time_option" name="time_option">
+                        <% if(option == 0){ %>
+                          <option value="0" selected>&nbsp&nbspOne Day&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% }else{ %>
+                          <option value="0">&nbsp&nbspOne Day&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% } %>
+
+                        <% if(option == 1){ %>
+                          <option value="1" selected>&nbsp&nbspOne Week&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% }else{ %>
+                          <option value="1">&nbsp&nbspOne Week&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% } %>
+
+                        <% if(option == 2){ %>
+                          <option value="2" selected>&nbsp&nbspOne Month&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% }else{ %>
+                          <option value="2">&nbsp&nbspOne Month&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% } %>
+
+                      </select>
+                    </div> <!-- form-group -->
+                  </div> <!-- col-md-3 -->
+
+                  <div class="col-md-3">
+                    <div class="form-group">
+
+                        <button type="button" name="edit" onClick="find()" class="btn btn-primary btn-sm">
+
+                        Search
+                        </button>
+                    </div>
+                  </div> <!-- col-md-3 -->
+
+                  <div class="col-md-12 column" style="margin-top: 10px;">

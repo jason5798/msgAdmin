@@ -30,11 +30,22 @@ router.route('/devices')
 		var mac    = req.query.mac;
 		var option = req.query.option;
 		var mdate  = req.query.mdate;
-		DeviceDbTools.findDevicesByDate(mdate,mac,Number(option),'asc',function(err,devices){
-		    if (err)
-				return res.send(err);
-			return res.json(devices);
-		});
+		var gwId     = req.query.gwId;
+		if(mac){
+			DeviceDbTools.findDevicesByDate(mdate,mac,Number(option),'asc',function(err,devices){
+			    if (err)
+					return res.send(err);
+				return res.json(devices);
+			});
+		}if(gwId){
+			DeviceDbTools.findDevicesByGWID(mdate,gwId,Number(option),'asc',function(err,devices){
+			    if (err)
+					return res.send(err);
+				return res.json(devices);
+			});
+		}else{
+			return res.json({});
+		}
 	});
 
 router.route('/devices/:mac')
@@ -86,7 +97,7 @@ router.route('/lists')
 		var type    = req.query.type;
 		var json    = {type:req.query.type};
 		var now = new Date().getTime();
-		
+
 		JsonFileTools.saveJsonToFile(typepPath,json);
 
 		ListDbTools.findByName('finalist',function(err,lists){
@@ -98,7 +109,7 @@ router.route('/lists')
 				}else{
 					var finalList = lists[0]['list'];
 				}
-				
+
 				if(finalList === undefined ){
 					finalList = null;
 				}else{
@@ -126,7 +137,7 @@ router.route('/lists')
 			}else{
 				return res.json({});
 			}
-			
+
 		});
 	});
 
