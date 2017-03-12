@@ -77,7 +77,11 @@ module.exports = function(app) {
 			console.log('find name:'+find_mac);
 			return;
 		}
+<<<<<<< HEAD
 		var length = 15;
+=======
+		var length = 20;
+>>>>>>> origin/master
 		if(devices.length<length){
 			length = devices.length;
 		}
@@ -90,7 +94,11 @@ module.exports = function(app) {
 			devices: devices,
 			success: req.flash('success').toString(),
 			error: req.flash('error').toString(),
+<<<<<<< HEAD
 			type:req.session.type,
+=======
+			type:type,
+>>>>>>> origin/master
 			mac:mac,
 			date:date,
 			option:option,
@@ -98,6 +106,17 @@ module.exports = function(app) {
 		});
 	});
   });
+<<<<<<< HEAD
+=======
+
+  app.get('/find', function (req, res) {
+	var testObj = JsonFileTools.getJsonFromFile(path2);
+	test = testObj.test;
+	console.log('render to post.ejs');
+	var find_mac = req.flash('mac').toString();
+	var successMessae,errorMessae;
+	console.log('mac:'+find_mac);
+>>>>>>> origin/master
 
   
   app.get('/gateway', function (req, res) {

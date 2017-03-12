@@ -138,10 +138,14 @@ $(document).ready(function(){
         onSelect: function() {this.hide();}
     });
 
+<<<<<<< HEAD
     if(document.getElementById("date").value === ''){
       document.getElementById("date").value = date;
     }
 
+=======
+    document.getElementById("date").value = date;
+>>>>>>> origin/master
       //table = $("#table1").dataTable(opt2);
 
           table.$('tr').click(function() {
