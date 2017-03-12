@@ -183,12 +183,18 @@ function toFindDevice(dateStr,json,dateOption,order,calllback) {
     }
 
     DeviceModel.find(json).sort({ recv:recvOrder}).exec(function(err, Devices){
-        console.log('Debug :Devices count:',Devices.length);
-        console.log('Debug :first\n:',Devices[0]['date']);
-        console.log('Debug :first\n:',Devices[Devices.length-1]['date']);
+       
+
         if (err) {
             console.log('Debug : findDevice err:', err);
             return calllback(err);
+        }
+        if(Devices){
+            console.log('Debug :Devices count:',Devices.length);
+            console.log('Debug :first\n:',Devices[0]['date']);
+            console.log('Debug :first\n:',Devices[Devices.length-1]['date']);
+        }else{
+            console.log('Debug :Devices count: 0');
         }
         return calllback(err,Devices);
     });

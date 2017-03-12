@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title><%= title%></title>
 	<%- include include_style.ejs %>
-    <%- include include_js.ejs %>
+
 </head>
 
 <body>
@@ -54,6 +54,16 @@
                       <img src="/icons/STI4n.png" class="btnIcon"/>
                       <label class="fa fa-2x" style="color:#ffffff">&nbspFlood&nbsp&nbsp</label>
                   </li>
+                  <li>
+                      <button id="others" name="others" class="center-block btnStyle" onclick="myFunction(this.id)">
+                      <img src="/icons/STI5n.png" class="btnIcon"/>
+                      <label class="fa fa-2x" style="color:#ffffff">&nbspOthers&nbsp&nbsp</label>
+                  </li>
+                  <li>
+                      <button id="gateway" name="gateway" class="center-block btnStyle" onclick="newPage(this.id)">
+                      <img src="/icons/STI6n.png" class="btnIcon"/>
+                      <label class="fa fa-2x" style="color:#ffffff">&nbspGateway&nbsp&nbsp</label>
+                  </li>
               </ul>
 
           </div>
@@ -63,17 +73,14 @@
           <div id="page-inner">
              <div class="row">
                 <div class="col-md-12">
-                    <div class="col-md-5" style="margin-top: 30px;">
-                        <label>Start Date</label>
-                        <input type="text" id="date" name="date" size="10" readonly>
-                        <input type="button" value="..." id="BTN" name="BTN">
-                    </div>
-
-
-                    <div class="col-md-7">
-                        <img src="/icons/Logo1n.png" class="logoStyle"/>
+                    <div >
+                        <img src="/icons/Logo1n.png" class="center-block logoStyle"/>
                           &nbsp<br>
+                        <div class="col-md-12" style="margin-top: -20px;">
+                          <label>Start Date</label>
+                          <input type="text" id="date" name="date" size="10" readonly>
+                          <input type="button" value="..." id="BTN" name="BTN">
+                      </div>
                     </div>
 
-
-                    <div class="col-md-12 column">
+            <div class="col-md-12 column" style="margin-top: 10px;">

@@ -3,15 +3,24 @@ var ParseBlaziong =  require('./parseBlaziong.js');
 var ParseDefine =  require('./parseDefine.js');
 var JsonFileTools =  require('./jsonFileTools.js');
 var listDbTools =  require('./listDbTools.js');
+var settings =  require('../settings.js');
 var mData,mMac,mRecv,mDate,mTimestamp,mType,mExtra ;
 var obj;
-var path = './public/data/finalList.json';
-var finalList = {};
 var overtime = 24;
 var hour = 60*60*1000;
+var isNeedGWMac = settings.isNeedGWMac;//For blazing
+//Save data to file path
+var path = './public/data/finalList.json';
+var path2 = './public/data/gwMap.json';
+//Save data
+var finalList = {};
+var macGwIdMapList;//For gateway map (key:mac value:id array)
+var gwIdMacMapList;//For gateway map (key:id value:mac)
 var mac_tag_map = {};
-var type_tag_map = {};
+var type_tag_map = {};//For filter repeater message key:mac+type value:tag
 var type_time_map = {};
+//Save user choice device type,GW MAC
+var selectType,selectMac;
 
 function init(){
     //finalList = JsonFileTools.getJsonFromFile(path);
@@ -20,6 +29,26 @@ function init(){
             return;
         finalList = lists[0].list;
     });
+}
+
+function initMap(){
+    macGwIdMapList = JsonFileTools.getJsonFromFile(path2);
+    gwIdMacMapList = getMapList(macGwIdMapList);
+}
+
+/*
+This function is GW map betwween id and mac transformer
+Source is GW maap (key:mac, value:id array)
+Transform to different map (key:id, value:)
+ */
+function getMapList(list){
+    var keys = Object.keys(list);
+    var json = {};
+    for(key in list){
+       json[list[key][0]]=key ;
+       json[list[key][1]]=key ;
+    }
+    return json;
 }
 
 init();
@@ -70,12 +99,12 @@ exports.parseMsg = function (msg) {
     }else{
         finalList[mMac]=msg;
     }
-    
+
     if(mInfo){
         console.log('**** '+msg.date +' mac:'+msg.mac+' => data:'+msg.data+'\ninfo:'+JSON.stringify(mInfo));
         msg.information=mInfo;
     }
-        
+
     return msg;
 }
 
@@ -93,8 +122,164 @@ exports.saveFinalListToFile = function () {
     JsonFileTools.saveJsonToFile(path,finalList);
 }
 
-exports.getFinalData = function (finalList) {
-    return ParseBlaziong.getTableData(finalList);
+exports.getDevicesData = function (type,devices) {
+    var array = [];
+    if(isNeedGWMac){
+        //For blazing
+        if(gwIdMacMapList === undefined || gwIdMacMapList === null){
+            initMap();
+        }
+    }
+
+    if(devices){
+        for (var i=0;i<devices.length;i++)
+        {
+            //if(i==53){
+              //console.log( '#### '+devices[i].mac + ': ' + JSON.stringify(devices[i]) );
+            //}
+            array.push(getDevicesArray(devices[i],i,type));
+        }
+    }
+
+    var dataString = JSON.stringify(array);
+    if(array.length===0){
+        dataString = null;
+    }
+    return dataString;
+};
+
+function getDevicesArray(obj,item,type){
+
+    var arr = [];
+
+    arr.push(item);
+    arr.push(obj.date);
+    arr.push(obj.data);
+    if(obj.info != undefined){
+        if(type === 'pir'){
+            if(obj.info.trigger != undefined && obj.info.trigger != 9  ){
+                arr.push(obj.info.trigger);
+            }else{
+                arr.push('X');
+            }
+        }else if(type === 'gps'){
+
+            if(obj.info.GPS_N  != undefined && obj.info.GPS_N != 9  ){
+                arr.push(obj.info.GPS_N);
+            }else{
+                arr.push('X');
+            }
+            if(obj.info.GPS_E  != undefined && obj.info.GPS_E != 9  ){
+                arr.push(obj.info.GPS_E);
+            }else{
+               arr.push('X');
+            }
+
+        }else if(type === 'pm25'){
+
+            if(obj.info.value  != undefined && obj.info.value != 9  ){
+                arr.push(obj.info.value);
+            }else{
+                arr.push('X');
+            }
+            if(obj.info.BATL  != undefined && obj.info.BATL != 9  ){
+                arr.push(obj.info.BATL);
+            }else{
+                arr.push('X');
+            }
+
+        }else if(type === 'flood'){
+
+            if(obj.info.trigger  != undefined && obj.info.trigger != 9  ){
+                arr.push(obj.info.trigger);
+            }else{
+                arr.push('X');
+            }
+            if(obj.info.BATL  != undefined && obj.info.BATL != 9  ){
+                arr.push(obj.info.BATL);
+            }else{
+                arr.push('X');
+            }
+
+        }
+    }else{
+        if(type == 'pir'){
+            arr.push('X');
+        } else if(type != 'others') {
+            arr.push('X');
+            arr.push('X');
+        }
+    }
+
+    arr.push(obj.extra.rssi);
+    arr.push(obj.extra.snr);
+    arr.push(obj.extra.sf);
+    arr.push(obj.extra.channel);
+    arr.push(obj.extra.gwid);
+
+    var gwMac =  gwIdMacMapList[obj.extra.gwid];
+    if(gwMac!= undefined){
+        arr.push(gwMac);
+    }else{
+        arr.push('');
+    }
+    arr.push(obj.extra.frameCnt);
+
+    return arr;
+}
+
+
+exports.getFinalData = function (finalist) {
+    var mItem = 1;
+    var array = [];
+    if(finalist){
+
+        //console.log( 'Last Device Information \n '+JSON.stringify( mObj));
+
+        for (var mac in finalist)
+        {
+            //console.log( '#### '+mac + ': ' + JSON.stringify(finalist[mac]) );
+
+            array.push(getArray(finalist[mac],mItem));
+            mItem++;
+        }
+    }
+
+    var dataString = JSON.stringify(array);
+    if(array.length===0){
+        dataString = null;
+    }
+    return dataString;
+};
+
+function getArray(obj,item){
+
+    var arr = [];
+    var connection_ok = "<img src='/icons/connection_ok.png' width='30' height='30' name='status'>";
+    var connection_fail = "<img src='/icons/connection_fail.png' width='30' height='30' name='status'>";
+    /*if(item<10){
+        arr.push('0'+item);
+    }else{
+        arr.push(item.toString());
+    }*/
+    arr.push(item);
+
+    arr.push(obj.mac);
+    arr.push(obj.date);
+    arr.push(obj.extra.rssi);
+    arr.push(obj.extra.snr);
+    console.log('obj.overtime :'+obj.overtime);
+
+
+    if( obj.overtime){
+        arr.push(connection_fail);
+        //console.log('overtime = true');
+    }else{
+        arr.push(connection_ok);
+        //console.log('overtime = false');
+    }
+    //console.log('arr = '+JSON.stringify(arr));
+    return arr;
 }
 
 function saveBlazingList(fport,mac,msg){

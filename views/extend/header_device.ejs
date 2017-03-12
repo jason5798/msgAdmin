@@ -1,15 +1,15 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title><%= title%></title>
-	<%- include include_style.ejs %>
-    <%- include include_js.ejs %>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><%= title%></title>
+  <%- include include_style.ejs %>
+
 </head>
 
 <body>
-	<div id="wrapper">
+  <div id="wrapper">
         <nav class="navbar navbar-default navbar-cls-top " role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
@@ -28,34 +28,43 @@
           <div class="sidebar-collapse">
               <img src="/icons/ST2.png" class="center-block iconStyle"/>
               <ul class="nav" id="main-menu">
+                  <li>
                   <% if(type==='pir'){ %>
-						        <li>
-                        <button id="pir" name="pir" class="center-block btnStyle" onclick="myFunction(this.id)">
+                    <li>
+                        <button id="pir" name="pir" class="center-block btnStyle" onclick="back()">
                         <img src="/icons/STI1n.png" class="btnIcon"/>
                         <label class="fa fa-2x" style="color:#ffffff">PIR&nbsp&nbsp&nbsp&nbsp&nbsp</label>
                         </button>
-                    </li>
-				          <% }else if(type==='gps'){%>
-                    <li>
-                        <button id="gps" name="gps" class="center-block btnStyle" onclick="myFunction(this.id)">
+
+                  <% }else if(type==='gps'){%>
+
+                        <button id="gps" name="gps" class="center-block btnStyle" onclick="back()">
                         <img src="/icons/STI2n.png" class="btnIcon"/>
                         <label class="fa fa-2x" style="color:#ffffff">Tracker</label>
                         </button>
-                    </li>
+
                   <% }else if(type==='gpm25'){%>
-                     <li>
-                        <button id="pm25" name="pm25" class="center-block btnStyle" onclick="myFunction(this.id)">
+
+                        <button id="pm25" name="pm25" class="center-block btnStyle" onclick="back()">
                         <img src="/icons/STI3n.png" class="btnIcon"/>
                         <label class="fa fa-2x" style="color:#ffffff">&nbspPM2.5&nbsp&nbsp</label>
                         </button>
-                    </li>
+
                   <% }else if(type==='flood'){%>
-                    <li>
-                        <button id="flood" name="flood" class="center-block btnStyle" onclick="myFunction(this.id)">
+
+                        <button id="flood" name="flood" class="center-block btnStyle" onclick="back()">
                         <img src="/icons/STI4n.png" class="btnIcon"/>
                         <label class="fa fa-2x" style="color:#ffffff">&nbspFlood&nbsp&nbsp</label>
-                    </li>
+
+                  <% }else if(type==='others'){%>
+
+                        <button id="flood" name="flood" class="center-block btnStyle" onclick="back()">
+                        <img src="/icons/STI5n.png" class="btnIcon"/>
+                        <label class="fa fa-2x" style="color:#ffffff">&nbspOthers&nbsp&nbsp</label>
+
+
                   <% } %>
+                  </li>
               </ul>
 
           </div>
@@ -64,19 +73,18 @@
         <div id="page-wrapper" >
           <div id="page-inner">
              <div class="row">
-                <div class="col-md-12">
-                    <div class="col-md-2">
-                      <button type="button" id="back" name="back" class="btn btn-primary btn-sm" onClick="back()">
+
+            <div class="col-md-12">
+              <div >
+                  <button type="button" id="back" name="back" class="btn btn-primary btn-sm" onClick="back()">
                         <img src="/icons/back.png" width="ˇ30" height="30"/> Back
-                      </button>
-                    </div>
+                    </button>
+                  <img src="/icons/Logo1n.png" class="center-block logoStyle" style="margin-top: -40px;"/>
+                    &nbsp<br>
+            </div>
 
+            <div class="col-md-12 column" style="margin-top: -10px;">
 
-                    <div class="col-md-10">
-                        <img src="/icons/Logo1n.png" class="center-block logoStyle"/>
-
-                    </div>
-                    <div class="col-md-12">
                         <h2>
                             <% if(type==='pir'){ %>
                             PIR
@@ -86,6 +94,8 @@
                             PM2.5
                             <% }else if(type==='flood'){%>
                             Flood
+                            <% }else if(type==='others'){%>
+                            Others
                             <% } %>
                         :<%= mac%></h2>
                     </div>

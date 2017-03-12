@@ -18,18 +18,20 @@
 				<th>Trigger</th>
 				<th>BATL</th>
 			<% } %>
-            <th>UL Rss</th>
-            <th>UL SNR</th>
-            <th>UL SF</th>
+            <th>Rss</th>
+            <th>SNR</th>
+            <th>SF</th>
             <th>Channel</th>
             <th>ApId</th>
-			<th>FrameCnt</th>
+			<th>ApMac</th>
+			<th>Frame</th>
             </tr>
         </thead>
         <% if(devices != null && devices.length >0){ %>
-		 
+
 		<tbody>
-			<% for(var i=0;i<devices.length ;i++){ %>
+
+			<% for(var i=0;i<length ;i++){ %>
 				<tr>
 					<td><%= i%></td>
 					<td><%= devices[i].date%></td>
@@ -90,7 +92,7 @@
 
 							<td>X</td>
 
-						<% } else { %>
+						<% } else if(type != 'others'){ %>
 
 							<td>X</td>
 							<td>X</td>
@@ -102,6 +104,7 @@
 					<td><%= devices[i].extra.sf%></td>
 					<td><%= devices[i].extra.channel%></td>
 					<td><%= devices[i].extra.gwid%></td>
+					<td></td>
 					<td><%= devices[i].extra.frameCnt%></td>
 				</tr>
 			<% } %>
@@ -109,8 +112,9 @@
 		</tbody>
 
 	<% } %>
-
-
-
 	</table>
+	<input type="hidden" id="mac" name="mac" value="<%= mac%>">
+	<input type="hidden" id="type" name="type" value="<%= type%>">
+	<input type="hidden" id="date" name="date" value="<%= date%>">
+	<input type="hidden" id="option" name="option" value="<%= option%>">
 <%- include extend/footer %>

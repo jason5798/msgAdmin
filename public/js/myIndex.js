@@ -1,28 +1,17 @@
 console.log("message manager");
 var now = new Date();
 var date = (now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate() );
-var type = "pir";
 var connected = false;
 var initBtnStr ="#pir";
-var opt={"oLanguage":{"sProcessing":"處理中...",
-      "sLengthMenu":"顯示 _MENU_ 項結果",
-      "sZeroRecords":"沒有匹配結果",
-      "sInfo":"顯示第 _START_ 至 _END_ 項結果，共 _TOTAL_ 項",
-      "sInfoEmpty":"顯示第 0 至 0 項結果，共 0 項",
-      "sInfoFiltered":"(從 _MAX_ 項結果過濾)",
-      "sSearch":"搜索:",
-      "oPaginate":{"sFirst":"首頁",
-                   "sPrevious":"上頁",
-                   "sNext":"下頁",
-                   "sLast":"尾頁"}
-      }
-};
+var type = document.getElementById("type").value;
+var host = window.location.hostname;
+var port = window.location.port;
+
 var opt2={
      "order": [[ 2, "desc" ]],
      "iDisplayLength": 25
  };
 
-//table = $("#table1").dataTable(opt); //中文化
 var table = $("#table1").dataTable(opt2);
 if(location.protocol=="https:"){
   var wsUri="wss://"+window.location.hostname+":"+window.location.port+"/ws/";
@@ -59,7 +48,7 @@ function wsConn() {
             }
       }else if(msg.id === 'init_btn'){
           //Set init button active
-          console.log("type:"+typeof(msg.v)+" = "+ msg.v);
+          console.log("highlight type:"+typeof(msg.v)+" = "+ msg.v);
           type = msg.v;
           initBtnStr  ='#'+msg.v;
           highlight(type);
@@ -70,7 +59,8 @@ function wsConn() {
   ws.onopen = function() {
 
     connected = true;
-    var obj = {"id":"init","v":document.cookie};
+
+    var obj = {"id":"init","v":type};
     var getRequest = JSON.stringify(obj);
     console.log("getRequest type : "+ typeof(getRequest)+" : "+getRequest);
     console.log("ws.onopen : "+ getRequest);
@@ -88,11 +78,6 @@ function wsConn() {
 }
 wsConn();           // connect to Node-RED server
 
-function setButton(_id,_v){ // update slider
-  myselect = $("#"+_id);
-   myselect.val(_v);
-   myselect.slider('refresh');
-}
 
 function myFunction(id){  // update device
   highlight(id);
@@ -113,7 +98,7 @@ function myFunction(id){  // update device
 }
 
 function highlight(id) {
-    var arr = ["pir","gps","pm25","flood"];
+    var arr = ["pir","gps","pm25","flood","others","gateway"];
     for(var i = 0;i<arr.length;i++){
       if(arr[i] === id){
         document.getElementById(arr[i]).style.background = "#89AAC0";
@@ -130,9 +115,14 @@ function toSecondTable(mac){
     document.location.href="/devices?mac="+mac+"&type="+type+"&date="+date;
 }
 
+function newPage(){
+    //alert('back');
+    location.href="/gateway";
+}
+
 
 $(document).ready(function(){
-
+    highlight(type);
     table.$('tr').click(function() {
         var row=table.fnGetData(this);
         toSecondTable(row[1]);
@@ -148,8 +138,11 @@ $(document).ready(function(){
         onSelect: function() {this.hide();}
     });
 
-    document.getElementById("date").value = date;
-      table = $("#table1").dataTable(opt2);
+    if(document.getElementById("date").value === ''){
+      document.getElementById("date").value = date;
+    }
+
+      //table = $("#table1").dataTable(opt2);
 
           table.$('tr').click(function() {
               var row=table.fnGetData(this);

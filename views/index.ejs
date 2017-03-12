@@ -10,6 +10,7 @@
 			<th>Status</th>
 			</tr>
 		</thead>
+<% if(finalList != null ){ %>
 
 	<% var keys = Object.keys(finalList); %>
 	<% if(finalList != null && keys.length>0){ %>
@@ -33,9 +34,11 @@
 			<% } %>
 
 		</tbody>
-	
+
 
 	<% } %>
 
+<% } %>
 	</table>
+	<input type="hidden" id="type" name="type" value="<%= type%>">
 <%- include extend/footer %>
