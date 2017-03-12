@@ -123,9 +123,9 @@ function showDialog(){
       }, 1000);
 }
 
-function back(){
+function newPage(){
     //alert('back');
-    location.href=document.referrer;
+    location.href="/gateway";
 }
 
 function find() {

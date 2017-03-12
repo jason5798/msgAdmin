@@ -37,7 +37,7 @@ router.route('/devices')
 					return res.send(err);
 				return res.json(devices);
 			});
-		}if(gwId){
+		}else if(gwId){
 			DeviceDbTools.findDevicesByGWID(mdate,gwId,Number(option),'asc',function(err,devices){
 			    if (err)
 					return res.send(err);
