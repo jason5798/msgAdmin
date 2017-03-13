@@ -22,6 +22,7 @@ if(location.protocol=="https:"){
 } else {
   var wsUri="ws://"+host+":"+port+"/ws/gateway";
 }
+console.log(wsUri);
 var ws=null;
 
 function wsConn() {
@@ -45,10 +46,10 @@ function wsConn() {
                   //console.log("addData type : "+ typeof(data)+" : "+data);
                   table.fnAddData(data);
                   table.$('tr').click(function() {
-                  var row=table.fnGetData(this);
-                  toSecondTable(row[1]);
-              });
+                      var row=table.fnGetData(this);
+                  });
             }
+            waitingDialog.hide();
       }else if(msg.id === 'init_btn'){
           //Set init button active
           console.log("type:"+typeof(msg.v)+" = "+ msg.v);
@@ -120,7 +121,7 @@ function showDialog(){
     waitingDialog.show();
     setTimeout(function () {
       waitingDialog.hide();
-      }, 1000);
+      }, 5000);
 }
 
 function newPage(){

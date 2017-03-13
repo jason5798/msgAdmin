@@ -189,7 +189,7 @@ function toFindDevice(dateStr,json,dateOption,order,calllback) {
             console.log('Debug : findDevice err:', err);
             return calllback(err);
         }
-        if(Devices){
+        if(Devices && Devices.length>0){
             console.log('Debug :Devices count:',Devices.length);
             console.log('Debug :first\n:',Devices[0]['date']);
             console.log('Debug :first\n:',Devices[Devices.length-1]['date']);

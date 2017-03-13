@@ -171,63 +171,69 @@ function getDevicesArray(obj,item,type){
     var arr = [];
 
     arr.push(item);
+    if(type === 'gateway'){
+        arr.push(obj.macAddr);
+    }
     arr.push(obj.date);
     arr.push(obj.data);
-    if(obj.info != undefined){
-        if(type === 'pir'){
-            if(obj.info.trigger != undefined && obj.info.trigger != 9  ){
-                arr.push(obj.info.trigger);
-            }else{
+    if(type !== 'gateway'){
+        if(obj.info != undefined){
+            if(type === 'pir'){
+                if(obj.info.trigger != undefined && obj.info.trigger != 9  ){
+                    arr.push(obj.info.trigger);
+                }else{
+                    arr.push('X');
+                }
+            }else if(type === 'gps'){
+
+                if(obj.info.GPS_N  != undefined && obj.info.GPS_N != 9  ){
+                    arr.push(obj.info.GPS_N);
+                }else{
+                    arr.push('X');
+                }
+                if(obj.info.GPS_E  != undefined && obj.info.GPS_E != 9  ){
+                    arr.push(obj.info.GPS_E);
+                }else{
+                   arr.push('X');
+                }
+
+            }else if(type === 'pm25'){
+
+                if(obj.info.value  != undefined && obj.info.value != 9  ){
+                    arr.push(obj.info.value);
+                }else{
+                    arr.push('X');
+                }
+                if(obj.info.BATL  != undefined && obj.info.BATL != 9  ){
+                    arr.push(obj.info.BATL);
+                }else{
+                    arr.push('X');
+                }
+
+            }else if(type === 'flood'){
+
+                if(obj.info.trigger  != undefined && obj.info.trigger != 9  ){
+                    arr.push(obj.info.trigger);
+                }else{
+                    arr.push('X');
+                }
+                if(obj.info.BATL  != undefined && obj.info.BATL != 9  ){
+                    arr.push(obj.info.BATL);
+                }else{
+                    arr.push('X');
+                }
+
+            }
+        }else{
+            if(type == 'pir'){
+                arr.push('X');
+            } else if(type != 'others') {
+                arr.push('X');
                 arr.push('X');
             }
-        }else if(type === 'gps'){
-
-            if(obj.info.GPS_N  != undefined && obj.info.GPS_N != 9  ){
-                arr.push(obj.info.GPS_N);
-            }else{
-                arr.push('X');
-            }
-            if(obj.info.GPS_E  != undefined && obj.info.GPS_E != 9  ){
-                arr.push(obj.info.GPS_E);
-            }else{
-               arr.push('X');
-            }
-
-        }else if(type === 'pm25'){
-
-            if(obj.info.value  != undefined && obj.info.value != 9  ){
-                arr.push(obj.info.value);
-            }else{
-                arr.push('X');
-            }
-            if(obj.info.BATL  != undefined && obj.info.BATL != 9  ){
-                arr.push(obj.info.BATL);
-            }else{
-                arr.push('X');
-            }
-
-        }else if(type === 'flood'){
-
-            if(obj.info.trigger  != undefined && obj.info.trigger != 9  ){
-                arr.push(obj.info.trigger);
-            }else{
-                arr.push('X');
-            }
-            if(obj.info.BATL  != undefined && obj.info.BATL != 9  ){
-                arr.push(obj.info.BATL);
-            }else{
-                arr.push('X');
-            }
-
-        }
-    }else{
-        if(type == 'pir'){
-            arr.push('X');
-        } else if(type != 'others') {
-            arr.push('X');
-            arr.push('X');
         }
     }
+
 
     arr.push(obj.extra.rssi);
     arr.push(obj.extra.snr);
@@ -235,12 +241,15 @@ function getDevicesArray(obj,item,type){
     arr.push(obj.extra.channel);
     arr.push(obj.extra.gwid);
 
-    var gwMac =  gwIdMacMapList[obj.extra.gwid];
-    if(gwMac!= undefined){
-        arr.push(gwMac);
-    }else{
-        arr.push('');
+    if(type !== 'gateway'){
+        var gwMac =  gwIdMacMapList[obj.extra.gwid];
+        if(gwMac!= undefined){
+            arr.push(gwMac);
+        }else{
+            arr.push('');
+        }
     }
+
     arr.push(obj.extra.frameCnt);
 
     return arr;

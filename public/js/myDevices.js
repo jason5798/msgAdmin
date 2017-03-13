@@ -1,5 +1,7 @@
 console.log("Message admin device information");
 var connected = false;
+var host = window.location.hostname;
+var port = window.location.port;
 var opt2={
     //"order": [[ 2, "desc" ]],
     "iDisplayLength": 100,
@@ -14,9 +16,9 @@ var opt2={
 var table = $('#table1').dataTable(opt2);
 
 if(location.protocol=="https:"){
-  var wsUri="wss://"+window.location.hostname+":"+window.location.port+"/ws/devices";
+  var wsUri="wss://"+host+":"+port+"/ws/gateway";
 } else {
-  var wsUri="ws://"+window.location.hostname+":"+window.location.port+"/ws/devices";
+  var wsUri="ws://"+host+":"+port+"/ws/gateway";
 }
 console.log(wsUri);
 var ws=null;
