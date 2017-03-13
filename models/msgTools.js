@@ -170,9 +170,10 @@ function getDevicesArray(obj,item,type){
 
     var arr = [];
 
-    arr.push(item);
     if(type === 'gateway'){
         arr.push(obj.macAddr);
+    }else{
+        arr.push(item);
     }
     arr.push(obj.date);
     arr.push(obj.data);
@@ -238,6 +239,9 @@ function getDevicesArray(obj,item,type){
     arr.push(obj.extra.rssi);
     arr.push(obj.extra.snr);
     arr.push(obj.extra.sf);
+    if(type === 'gateway'){
+        arr.push(obj.extra.fport);
+    }
     arr.push(obj.extra.channel);
     arr.push(obj.extra.gwid);
 

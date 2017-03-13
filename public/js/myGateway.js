@@ -5,8 +5,8 @@ var date = (now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()
 var host = window.location.hostname;
 var port = window.location.port;
 var opt2={
-    //"order": [[ 2, "desc" ]],
-    "iDisplayLength": 100,
+    "order": [[ 1, "desc" ]],
+    "iDisplayLength": 10,
     dom: 'Blrtip',
     buttons: [
         'copyHtml5',
@@ -32,7 +32,7 @@ function wsConn() {
     if (typeof(m.data) === "string" && m. data !== null){
       var msg =JSON.parse(m.data);
       console.log("from-node-red : id:"+msg.id);
-      if(msg.id === 'change_table'){
+      if(msg.id === 'change_table1' || msg.id === 'change_table2'){
           //Remove init button active
           console.log("initBtnStr:"+initBtnStr+"remove active");
           //$(initBtnStr).siblings().removeClass("active");
@@ -40,7 +40,6 @@ function wsConn() {
           //Reload table data
           console.log("v type:"+typeof(msg.v));
 
-            table.fnClearTable();
             var data = JSON.parse(msg.v);
             if(data){
                   //console.log("addData type : "+ typeof(data)+" : "+data);
@@ -131,6 +130,7 @@ function newPage(){
 
 function find() {
     showDialog();
+    table.fnClearTable();
     var mac = document.getElementById("selected_mac").value;
     var option = document.getElementById("time_option").value;
     var date = document.getElementById("date").value;

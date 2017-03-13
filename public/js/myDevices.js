@@ -16,9 +16,9 @@ var opt2={
 var table = $('#table1').dataTable(opt2);
 
 if(location.protocol=="https:"){
-  var wsUri="wss://"+host+":"+port+"/ws/gateway";
+  var wsUri="wss://"+host+":"+port+"/ws/devices";
 } else {
-  var wsUri="ws://"+host+":"+port+"/ws/gateway";
+  var wsUri="ws://"+host+":"+port+"/ws/devices";
 }
 console.log(wsUri);
 var ws=null;
