@@ -1,13 +1,13 @@
 # msgAdmin
 
-A MQTT message tool for data manager.
+A MQTT message manager tool for blazing.
 
 ## Quick Start
 
-1. `cd msgAdmin
-2. `npm install
-3. index <http://localhost:3000>
-4. node-red <http://localhost:3000/red>
+1. cd msgAdmin
+2. npm install
+3. index <http://localhost:3001>
+4. node-red <http://localhost:3001/red>
 
 
 ## Copyright and license
