@@ -3,28 +3,39 @@
 	<table id="table1"  class="display" cellspacing="0" width="100%">
 		<thead>
             <tr style="color:#428bca">
-            <th>Item</th>
-            <th>Receive time</th>
-            <th>Data</th>
-            <% if(type === 'pir'){ %>
-				<th>Trigger</th>
-			<% }else if(type === 'gps'){ %>
-				<th>Latitude</th>
-				<th>Longitude</th>
-			<% }else if(type === 'pm25'){ %>
-				<th>Value</th>
-				<th>BATL</th>
-			<% }else if(type === 'flood'){ %>
-				<th>Trigger</th>
+	            <th>Item</th>
+	            <th>Receive time</th>
+	            <th>Data</th>
+<!-- For blazing -->
+            <% if(co === 'blazing'){ %>
+	            <% if(type === 'pir'){ %>
+					<th>Trigger</th>
+				<% }else if(type === 'gps'){ %>
+					<th>Latitude</th>
+					<th>Longitude</th>
+				<% }else if(type === 'pm25'){ %>
+					<th>Value</th>
+					<th>BATL</th>
+				<% }else if(type === 'flood'){ %>
+					<th>Trigger</th>
+					<th>BATL</th>
+				<% } %>
+	            <th>PH</th>
+	            <th>SNR</th>
+	            <th>SF</th>
+	            <th>Channel</th>
+	            <th>ApId</th>
+				<th>ApMac</th>
+				<th>Frame</th>
+<!-- For 惟一 -->
+			<% }else { %>
+				<th>PH</th>
+	            <th>DO</th>
+	            <th>COND</th>
+	            <th>Temperature</th>
+	            <th>NTU</th>
 				<th>BATL</th>
 			<% } %>
-            <th>Rss</th>
-            <th>SNR</th>
-            <th>SF</th>
-            <th>Channel</th>
-            <th>ApId</th>
-			<th>ApMac</th>
-			<th>Frame</th>
             </tr>
         </thead>
         <% if(devices != null && devices.length >0){ %>
@@ -33,9 +44,11 @@
 
 			<% for(var i=0;i<length ;i++){ %>
 				<tr>
-					<td><%= i%></td>
+					<td><%= i+1%></td>
 					<td><%= devices[i].date%></td>
 					<td><%= devices[i].data%></td>
+<!-- For blazing -->
+            	<% if(co === 'blazing'){ %>
 					<% if(devices[i].info != undefined){ %>
 
 						<% if(type === 'pir'){ %>
@@ -106,9 +119,18 @@
 					<td><%= devices[i].extra.gwid%></td>
 					<td></td>
 					<td><%= devices[i].extra.frameCnt%></td>
-				</tr>
-			<% } %>
 
+<!-- For 惟一 -->
+				<% }else { %>
+					<th><%= devices[i].info.ph%></th>
+		            <th><%= devices[i].info.do%></th>
+		            <th><%= devices[i].info.cond%></th>
+		            <th><%= devices[i].info.temperature%></th>
+		            <th><%= devices[i].info.ntu%></th>
+					<th><%= devices[i].info.voltage%>BATL</th>
+				<% } %>
+	            </tr>
+	        <% } %>
 		</tbody>
 
 	<% } %>

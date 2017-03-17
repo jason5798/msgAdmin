@@ -51,6 +51,7 @@ var setting = {
       deviceDbTools:require("./models/deviceDbTools.js"),
       msgTools:require("./models/msgTools.js"),
       listeDbTools:require("./models/listDbTools.js"),
+      settings:require("./settings.js"),
     }    // enables global context
 };
 

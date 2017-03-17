@@ -14,7 +14,7 @@ module.exports = function(app) {
   app.get('/', function (req, res) {
   	    var now = new Date().getTime();
 		type = req.query.type;
-		if(type === undefined){
+		if(type === undefined && settings.isNeedTypeSwitch){
 			var typeObj = JsonFileTools.getJsonFromFile(path2);
 			if(typeObj)
 				type = typeObj.type;
@@ -22,7 +22,7 @@ module.exports = function(app) {
 				var json = {"type":'pir'};
 				JsonFileTools.saveJsonToFile(path2,json);
 			}
-		}else if(type != 'gateway'){ //If press device button in gateway page that need update type
+		}else if(type != undefined && type != 'gateway'){ //If press device button in gateway page that need update type
 			var json = {"type":type};
 			JsonFileTools.saveJsonToFile(path2,json);
 		}
@@ -33,13 +33,18 @@ module.exports = function(app) {
 					success: '',
 					error: err.toString(),
 					finalList:null,
-					type:type
+					type:type,
+					isNeedTypeSwitch:settings.isNeedTypeSwitch,
+					co:settings.co
 				});
 			}else{
 				
-
-				req.session.type = type;
-				var finalList = lists[0]['list'][type];
+				if(settings.isNeedTypeSwitch){
+					var finalList = lists[0]['list'][type];
+				}else{
+					var finalList = lists[0]['list'];
+				}
+				
 				//console.log('finalList :'+JSON.stringify(finalList));
 				if(finalList){
 					var keys = Object.keys(finalList);
@@ -60,7 +65,9 @@ module.exports = function(app) {
 					success: null,
 					error: null,
 					finalList:finalList,
-					type:type
+					type:type,
+					isNeedTypeSwitch:settings.isNeedTypeSwitch,
+					co:settings.co
 				});
 			}
 		});
@@ -94,7 +101,9 @@ module.exports = function(app) {
 			mac:mac,
 			date:date,
 			option:option,
-			length:length
+			length:length,
+			isNeedTypeSwitch:settings.isNeedTypeSwitch,
+			co:settings.co
 		});
 	});
   });
