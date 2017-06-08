@@ -2,19 +2,44 @@
 var router = express.Router();
 var DeviceDbTools = require('../models/deviceDbTools.js');
 var ListDbTools = require('../models/listDbTools.js');
+var UnitDbTools = require('../models/unitDbTools.js');
 var settings = require('../settings');
 var JsonFileTools =  require('../models/jsonFileTools.js');
 var path = './public/data/finalList.json';
 var path2 = './public/data/test.json';
-var path3 = './public/data/gwMap.json';
+var unitPath = './public/data/unit.json';
 var hour = 60*60*1000;
 var type = 'gps';
+
+function findUnitsAndShowSetting(req,res,isUpdate){
+	UnitDbTools.findAllUnits(function(err,units){
+		var successMessae,errorMessae;
+		var macTypeMap = {};
+
+		if(err){
+			errorMessae = err;
+		}else{
+			if(+units.length>0){
+				successMessae = '查詢到'+units.length+'筆資料';
+			}
+		}
+		req.session.units = units;
+
+		console.log( "successMessae:"+successMessae );
+		res.render('setting', { title: 'Setting',
+			units:req.session.units,
+			user:req.session.user,
+			success: successMessae,
+			error: errorMessae
+		});
+	});
+}
 
 module.exports = function(app) {
   app.get('/', function (req, res) {
   	    var now = new Date().getTime();
 		type = req.query.type;
-		if(type === undefined){
+		if(type === undefined && settings.isNeedTypeSwitch){
 			var typeObj = JsonFileTools.getJsonFromFile(path2);
 			if(typeObj)
 				type = typeObj.type;
@@ -22,24 +47,25 @@ module.exports = function(app) {
 				var json = {"type":'pir'};
 				JsonFileTools.saveJsonToFile(path2,json);
 			}
-		}else if(type != 'gateway'){ //If press device button in gateway page that need update type
+		}else if(type != undefined && type != 'gateway'){ //If press device button in gateway page that need update type
 			var json = {"type":type};
 			JsonFileTools.saveJsonToFile(path2,json);
 		}
-		
+
 		ListDbTools.findByName('finalist',function(err,lists){
 			if(err){
 				res.render('index', { title: 'Index',
 					success: '',
 					error: err.toString(),
 					finalList:null,
-					type:type
+					type:type,
+					isNeedTypeSwitch:settings.isNeedTypeSwitch,
+					co:settings.co
 				});
 			}else{
-				
+                var finalList = lists[0]['list'];
+				var unitObj = JsonFileTools.getJsonFromFile(unitPath);
 
-				req.session.type = type;
-				var finalList = lists[0]['list'][type];
 				//console.log('finalList :'+JSON.stringify(finalList));
 				if(finalList){
 					var keys = Object.keys(finalList);
@@ -48,8 +74,14 @@ module.exports = function(app) {
 						//console.log( i + ') mac : ' + keys[i] +'=>' + JSON.stringify(finalList[keys[i]]));
 						//console.log(i+' result : '+ ((now - finalList[keys[i]].timestamp)/hour));
 						finalList[keys[i]].overtime = true;
-						if( ((now - finalList[keys[i]].timestamp)/hour) < 1 )  {
+						if( ((now - finalList[keys[i]].timestamp)/hour) < 2 )  {
 							finalList[keys[i]].overtime = false;
+						}
+						finalList[keys[i]].name = '';
+						//console.log(i+' keys[i] : '+ keys[i]);
+						//console.log(i+' unitObj[keys[i]] : '+ unitObj[keys[i]]);
+						if( unitObj[keys[i]] )  {
+							finalList[keys[i]].name = unitObj[keys[i]];
 						}
 					}
 				}else{
@@ -60,7 +92,9 @@ module.exports = function(app) {
 					success: null,
 					error: null,
 					finalList:finalList,
-					type:type
+					type:type,
+					isNeedTypeSwitch:settings.isNeedTypeSwitch,
+					co:settings.co
 				});
 			}
 		});
@@ -94,20 +128,76 @@ module.exports = function(app) {
 			mac:mac,
 			date:date,
 			option:option,
-			length:length
+			length:length,
+			isNeedTypeSwitch:settings.isNeedTypeSwitch,
+			co:settings.co
 		});
 	});
   });
 
-  
-  app.get('/gateway', function (req, res) {
-        var macGwIDMap = JsonFileTools.getJsonFromFile(path3);
-		var macList = Object.keys(macGwIDMap);
-		res.render('gateway', { title: 'Gateway',
-			success: null,
-			error: null,
-			macList:macList,
-			option:1
-		});
+  app.get('/setting', function (req, res) {
+		console.log('render to setting.ejs');
+		findUnitsAndShowSetting(req,res,true);
   });
+
+  app.post('/setting', function (req, res) {
+		var	post_mac = req.body.mac;
+		var post_name = req.body.name;
+		var post_type = req.body.type_option;
+		var post_mode = req.body.mode;
+		var typeString = req.body.typeString;
+		console.log('mode : '+post_mode);
+		if(post_mode == 'new'){
+			if(	post_mac && post_name && post_mac.length==8 && post_name.length>=1){
+				console.log('post_mac:'+post_mac);
+				console.log('post_name:'+post_name);
+				UnitDbTools.saveUnit(post_mac,post_name,post_type,typeString,function(err,result){
+					if(err){
+						req.flash('error', err);
+						return res.redirect('/setting');
+					}
+					findUnitsAndShowSetting(req,res,true);
+				});
+				var unitObj = JsonFileTools.getJsonFromFile(unitPath);
+				unitObj[post_mac] = post_name;
+				JsonFileTools.saveJsonToFile(unitPath,unitObj);
+				return res.redirect('/setting');
+			}
+		}else if(post_mode == 'del'){//Delete mode
+			post_mac = req.body.postMac;
+			UnitDbTools.removeUnitByMac(post_mac,function(err,result){
+				if(err){
+					req.flash('error', err);
+					console.log('removeUnitByMac :'+post_mac + err);
+					return res.redirect('/setting');
+				}else{
+					req.flash('error', err);
+					console.log('removeUnitByMac :'+post_mac + 'success');
+				}
+				findUnitsAndShowSetting(req,res,false);
+			});
+			var unitObj = JsonFileTools.getJsonFromFile(unitPath);
+			if(unitObj[post_mac]){
+				delete unitObj[post_mac];
+			}
+			
+			JsonFileTools.saveJsonToFile(unitPath,unitObj);
+
+		}else{//Edit mode
+			post_mac = req.body.postMac;
+			UnitDbTools.updateUnit(post_type,post_mac,post_name,null,typeString,function(err,result){
+				if(err){
+					req.flash('error', err);
+					console.log('edit  :'+post_mac + err);
+					return res.redirect('/setting');
+				}else{
+					console.log('edit :'+post_mac + 'success');
+				}
+				findUnitsAndShowSetting(req,res,false);
+			});
+     		var unitObj = JsonFileTools.getJsonFromFile(unitPath);
+			unitObj[post_mac] = post_name;
+			JsonFileTools.saveJsonToFile(unitPath,unitObj);
+		}
+  	});
 };

@@ -1,6 +1,6 @@
 # msgAdmin
 
-A MQTT message manager tool for blazing.
+A MQTT message manager tool.
 
 ## Quick Start
 

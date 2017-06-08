@@ -17,7 +17,8 @@ var flash = require('connect-flash');
 //Jason add on 2017.02.16 - end
 var app = express();
 
-var port = process.env.PORT || 3001;
+var port = process.env.PORT || 3006;
+console.log('Server listen port :'+port);
 app.set('port', port);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -51,6 +52,7 @@ var setting = {
       deviceDbTools:require("./models/deviceDbTools.js"),
       msgTools:require("./models/msgTools.js"),
       listeDbTools:require("./models/listDbTools.js"),
+      settings:require("./settings.js"),
     }    // enables global context
 };
 

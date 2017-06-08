@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var settings = require('../settings');
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost/blazing');
+var dbPath = settings.dbpath;
+mongoose.connect(dbPath);
 module.exports = mongoose;

@@ -4,6 +4,7 @@ var date = (now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate()
 var connected = false;
 var initBtnStr ="#pir";
 var type = document.getElementById("type").value;
+var isNeedTypeSwitch = document.getElementById("isNeedTypeSwitch").value;
 var host = window.location.hostname;
 var port = window.location.port;
 
@@ -98,15 +99,19 @@ function myFunction(id){  // update device
 }
 
 function highlight(id) {
-    var arr = ["pir","gps","pm25","flood","others","gateway"];
-    for(var i = 0;i<arr.length;i++){
-      if(arr[i] === id){
-        document.getElementById(arr[i]).style.background = "#89AAC0";
-      }else{
-        document.getElementById(arr[i]).style.background = "#42566A";
+    console.log("isNeedTypeSwitch :"+isNeedTypeSwitch);
+    if(isNeedTypeSwitch === 'true'){
+      console.log("highlight("+id+")");
+      var arr = ["pir","gps","pm25","flood","others","gateway"];
+      for(var i = 0;i<arr.length;i++){
+        if(arr[i] === id){
+          document.getElementById(arr[i]).style.background = "#89AAC0";
+        }else{
+          document.getElementById(arr[i]).style.background = "#42566A";
+        }
       }
     }
-  }
+}
 
 function toSecondTable(mac){
     //alert("mac :"+mac);
@@ -122,7 +127,9 @@ function newPage(){
 
 
 $(document).ready(function(){
+
     highlight(type);
+
     table.$('tr').click(function() {
         var row=table.fnGetData(this);
         toSecondTable(row[1]);
