@@ -15,6 +15,22 @@ var opt2={
 };
 var table = $('#table1').dataTable(opt2);
 
+var plot1;
+var options1 ={
+                title: "PH",
+                axes:
+                {
+                    xaxis: {
+                        numberTicks: 24,
+                        renderer:$.jqplot.DateAxisRenderer,
+                        tickOptions:{formatString:'%H:%M'}
+                    },
+                    yaxis: {
+                        numberTicks: 10
+                    }
+                }
+            };
+
 if(location.protocol=="https:"){
   var wsUri="wss://"+host+":"+port+"/ws/devices";
 } else {
@@ -39,7 +55,8 @@ function wsConn() {
 
           table.fnClearTable();
           var data = JSON.parse(msg.v);
-          console.log("addData type : "+ typeof(data)+" : "+data);
+          //console.log("addData type : "+ typeof(data)+" : "+data);
+          showChart(data);
           if(data){
               table.fnAddData(data);
           }
@@ -98,6 +115,58 @@ function showDialog(){
 function back(){
     //alert('back');
     location.href=document.referrer;
+}
+
+function showChart(data){
+    var tempList = [],humList=[];
+    //alert('data.length : '+data.length);
+    for(i=0;i<data.length;i++){
+        //alert('i : '+i);
+        if(i > (data.length-1) ){
+            break;
+        }else{
+            tempList.push([new Date(data[i][1]).getTime(),data[i][3] ]);
+            if(i<2){
+              alert('tempList :'+JSON.stringify(tempList));
+            }
+        }
+    }
+
+
+    tatalTime = Math.ceil((tempList[tempList.length-1][0]-tempList[0][0])/(1000*60*60))+1;
+    //alert( tatalTime );
+    if(tatalTime<12){
+        x_number = tatalTime;
+        formatStr = '%H:%M';
+    }else if(tatalTime<26){
+        x_number = tatalTime/2;
+        formatStr = '%H:%M';
+    }else if(tatalTime<24*7){
+        x_number = Math.ceil(tatalTime/24);
+        formatStr = '%m/%d';
+    }else if(tatalTime<24*31){
+        x_number = Math.ceil(tatalTime/(2*24));
+        formatStr = '%m/%d';
+    }else if(tatalTime<24*31*3){
+        x_number = Math.ceil(tatalTime/(7*24));
+        formatStr = '%m/%d';
+    }
+
+
+    if(plot1){
+        plot1.destroy();
+    }
+    /*if(plot2){
+        plot2.destroy();
+    }*/
+
+
+    options1.axes.xaxis.numberTicks = x_number;
+    //options2.axes.xaxis.numberTicks = x_number;
+    options1.axes.xaxis.tickOptions.formatString = formatStr;
+    //options2.axes.xaxis.tickOptions.formatString = formatStr;
+    plot1 = $.jqplot ('chartTmp', [tempList],options1);
+    //plot2 = $.jqplot ('chartHum', [humList],options2);
 }
 
 

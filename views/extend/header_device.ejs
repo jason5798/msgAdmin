@@ -106,21 +106,19 @@
 
             <div class="col-md-12 column" style="margin-top: -10px;">
 
-                        <h2>
-                            <% if(type==='pir'){ %>
-                            PIR:
-                            <% }else if(type==='gps'){%>
-                            Tracker:
-                            <% }else if(type==='pm25'){%>
-                            PM2.5:
-                            <% }else if(type==='flood'){%>
-                            Flood:
-                            <% }else if(type==='others'){%>
-                            Others:
-                            <% }else {%>
-                            Mac:
-                            <% } %>
-                        <%= mac%></h2>
-                    </div>
+                <h2>Mac:<%= mac%></h2>
+            </div>
+
+            <div class="col-md-12">
+              <div id="chartBlock" class="panel-body">
+
+                  <div class="panel panel-info">
+
+                      <div class="panel-body">
+                          <div id="chartTmp" style=t"height:100px;width:400px; "></div>
+                      </div> <!-- panel-body -->
+                  </div> <!-- panel panel-info -->
+              </div> <!-- panel-body -->
+          </div> <!-- col -->
 
                     <div class="col-md-12 column">

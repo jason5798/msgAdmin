@@ -96,7 +96,7 @@ module.exports = function(app) {
 	var date = req.query.date;
 	var option = req.query.option;
 	req.session.type = type;
-	DeviceDbTools.findDevicesByDate(date,mac,Number(option),'desc',function(err,devices){
+	DeviceDbTools.findDevicesByDate(date,mac,Number(0),'desc',function(err,devices){
 		if(err){
 			console.log('find name:'+find_mac);
 			return;
