@@ -40,20 +40,7 @@ module.exports = function(app) {
   app.get('/', function (req, res) {
   	    var now = new Date().getTime();
 		var selectObj = JsonFileTools.getJsonFromFile(selectPath);
-		type = req.query.type;
-		if(type === undefined && settings.isNeedTypeSwitch){
-			var typeObj = JsonFileTools.getJsonFromFile(path2);
-			if(typeObj)
-				type = typeObj.type;
-			else{
-				var json = {"type":'pir'};
-				JsonFileTools.saveJsonToFile(path2,json);
-			}
-		}else if(type != undefined && type != 'gateway'){ //If press device button in gateway page that need update type
-			var json = {"type":type};
-			JsonFileTools.saveJsonToFile(path2,json);
-		}
-
+	
 		ListDbTools.findByName('finalist',function(err,lists){
 			if(err){
 				res.render('index', { title: 'Index',
