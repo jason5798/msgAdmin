@@ -13,6 +13,6 @@ module.exports = {
   pw: '57381042',
   gIoTopic:'client/200000109/200000109-GIOT-MAKER',
   hour : 60*60*1000,
-  isNeedGWMac: true,
+  isNeedGWMac: false,
   isNeedTypeSwitch: false,
 };

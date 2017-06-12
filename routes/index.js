@@ -8,6 +8,7 @@ var JsonFileTools =  require('../models/jsonFileTools.js');
 var path = './public/data/finalList.json';
 var path2 = './public/data/test.json';
 var unitPath = './public/data/unit.json';
+var selectPath = './public/data/select.json';
 var hour = 60*60*1000;
 var type = 'gps';
 
@@ -38,6 +39,7 @@ function findUnitsAndShowSetting(req,res,isUpdate){
 module.exports = function(app) {
   app.get('/', function (req, res) {
   	    var now = new Date().getTime();
+		var selectObj = JsonFileTools.getJsonFromFile(selectPath);
 		type = req.query.type;
 		if(type === undefined && settings.isNeedTypeSwitch){
 			var typeObj = JsonFileTools.getJsonFromFile(path2);
@@ -94,7 +96,8 @@ module.exports = function(app) {
 					finalList:finalList,
 					type:type,
 					isNeedTypeSwitch:settings.isNeedTypeSwitch,
-					co:settings.co
+					co:settings.co,
+					select:selectObj
 				});
 			}
 		});
@@ -104,7 +107,7 @@ module.exports = function(app) {
 	var mac = req.query.mac;
 	var type = req.query.type;
 	var date = req.query.date;
-	var option = '1';
+	var option = req.query.option;
 	req.session.type = type;
 	DeviceDbTools.findDevicesByDate(date,mac,Number(option),'desc',function(err,devices){
 		if(err){

@@ -116,8 +116,9 @@ function highlight(id) {
 function toSecondTable(mac){
     //alert("mac :"+mac);
     var date =document.getElementById("date").value;
+    var option =document.getElementById("time_option").value;
     //alert("date :"+date);
-    document.location.href="/devices?mac="+mac+"&type="+type+"&date="+date;
+    document.location.href="/devices?mac="+mac+"&type="+type+"&date="+date+"&option="+option;
 }
 
 function newPage(){
@@ -145,6 +146,8 @@ $(document).ready(function(){
         onSelect: function() {this.hide();}
     });
 
+
+
     if(document.getElementById("date").value === ''){
       document.getElementById("date").value = date;
     }
@@ -166,7 +169,6 @@ $(document).ready(function(){
               onSelect: function() {this.hide();}
           });
 
-          document.getElementById("date").value = date;
      /*$("#table1").on({
           mouseenter: function(){
            //stuff to do on mouse enter

@@ -61,13 +61,45 @@
              <div class="row">
              <% if(title ==='Index'){ %>
                 <div >
-                  <div class="col-md-12">
+                  <div class="col-md-6">
                       <div class="col-md-12" style="margin-top: 0px;">
                         <label>Start Date</label>
-                        <input type="text" id="date" name="date" size="10" readonly>
+                        <input type="text" id="date" name="date" size="10" value="<%= select.date%>" readonly>
                         <input type="button" value="..." id="BTN" name="BTN">
                     </div>
                   </div>
+                  <!-- Select Range -->
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>Select Range</label>
+                      <select "selected_time" id="time_option" name="time_option">
+                        <% if(select.option == 0){ %>
+                          <option value="0" selected>&nbsp&nbspOne Day&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% }else{ %>
+                          <option value="0">&nbsp&nbspOne Day&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% } %>
+
+                        <% if(select.option == 1){ %>
+                          <option value="1" selected>&nbsp&nbspOne Week&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% }else{ %>
+                          <option value="1">&nbsp&nbspOne Week&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% } %>
+
+                        <% if(select.option == 2){ %>
+                          <option value="2" selected>&nbsp&nbspOne Month&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% }else{ %>
+                          <option value="2">&nbsp&nbspOne Month&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% } %>
+
+                        <% if(select.option == 3){ %>
+                          <option value="3" selected>&nbsp&nbspThree Month&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% }else{ %>
+                          <option value="3">&nbsp&nbspThree Month&nbsp&nbsp&nbsp&nbsp&nbsp</option>
+                        <% } %>
+
+                      </select>
+                    </div> <!-- form-group -->
+                  </div> <!-- col-md-3 -->
 
             <% } %>
             <div class="col-md-12 column" style="margin-top: 10px;">

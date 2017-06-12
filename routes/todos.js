@@ -6,6 +6,7 @@ var JsonFileTools =  require('../models/jsonFileTools.js');
 var ListDbTools = require('../models/listDbTools.js');
 var moment = require('moment');
 var typepPath = './public/data/test.json';
+var selectPath = './public/data/select.json';
 var hour = 60*60*1000;
 
 router.route('/devices')
@@ -31,6 +32,10 @@ router.route('/devices')
 		var option = req.query.option;
 		var mdate  = req.query.mdate;
 		var gwId     = req.query.gwId;
+		var selectObj = JsonFileTools.getJsonFromFile(selectPath);
+		selectObj.option = Number(option);
+		selectObj.date = mdate;
+		JsonFileTools.saveJsonToFile(selectPath,selectObj);
 		if(mac){
 			DeviceDbTools.findDevicesByDate(mdate,mac,Number(option),'asc',function(err,devices){
 			    if (err)
