@@ -28,62 +28,17 @@
            <!-- /. NAV TOP  -->
         <nav class="navbar-default navbar-side" role="navigation">
           <div class="sidebar-collapse">
-              <% if(co == 'blazing'){ %>
-                <img src="/icons/ST2.png" class="center-block iconStyle"/>
-              <% } %>
               <ul class="nav" id="main-menu">
-              <% if(isNeedTypeSwitch){ %>
-                  <li>
-                  <% if(type==='pir'){ %>
-                    <li>
-                        <button id="pir" name="pir" class="center-block btnStyle" onclick="back()">
-                        <img src="/icons/STI1n.png" class="btnIcon"/>
-                        <label class="fa fa-2x" style="color:#ffffff">PIR&nbsp&nbsp&nbsp&nbsp&nbsp</label>
-                        </button>
-
-                  <% }else if(type==='gps'){%>
-
-                        <button id="gps" name="gps" class="center-block btnStyle" onclick="back()">
-                        <img src="/icons/STI2n.png" class="btnIcon"/>
-                        <label class="fa fa-2x" style="color:#ffffff">Tracker</label>
-                        </button>
-
-                  <% }else if(type==='gpm25'){%>
-
-                        <button id="pm25" name="pm25" class="center-block btnStyle" onclick="back()">
-                        <img src="/icons/STI3n.png" class="btnIcon"/>
-                        <label class="fa fa-2x" style="color:#ffffff">&nbspPM2.5&nbsp&nbsp</label>
-                        </button>
-
-                  <% }else if(type==='flood'){%>
-
-                        <button id="flood" name="flood" class="center-block btnStyle" onclick="back()">
-                        <img src="/icons/STI4n.png" class="btnIcon"/>
-                        <label class="fa fa-2x" style="color:#ffffff">&nbspFlood&nbsp&nbsp</label>
-
-                  <% }else if(type==='others'){%>
-
-                        <button id="flood" name="flood" class="center-block btnStyle" onclick="back()">
-                        <img src="/icons/STI5n.png" class="btnIcon"/>
-                        <label class="fa fa-2x" style="color:#ffffff">&nbspOthers&nbsp&nbsp</label>
-
-
-                  <% } %>
+                  <li  >
+                      <% if(title ==='Device'){ %>
+                        <a class="active-menu"  href="/">
+                      <% }else{ %>
+                        <a href="/">
+                      <% } %>
+                        <i class="fa fa-table fa-3x"></i>
+                        <label class="fa fa-2x" style="color:#ffffff">Device</label>
+                      </a>
                   </li>
-              <% }else{ %>
-<!-- Function classification ------------------------------------->
-
-                    <li  >
-                        <% if(title ==='Device'){ %>
-                          <a class="active-menu"  href="/">
-                        <% }else{ %>
-                          <a href="/">
-                        <% } %>
-                          <i class="fa fa-table fa-3x"></i>
-                          <label class="fa fa-2x" style="color:#ffffff">Device</label>
-                        </a>
-                    </li>
-              <% } %>
               </ul>
 
           </div>
@@ -93,32 +48,50 @@
           <div id="page-inner">
              <div class="row">
 
-            <div class="col-md-12">
-              <div >
-                  <button type="button" id="back" name="back" class="btn btn-primary btn-sm" onClick="back()">
-                        <img src="/icons/back.png" width="ˇ30" height="30"/> Back
-                    </button>
-                    <% if(co == 'blazing'){ %>
-                      <img src="/icons/Logo1n.png" class="center-block logoStyle"/>
-                    <% } %>
-                    &nbsp<br>
-            </div>
+                <div class="col-md-12">
+                  <div >
+                      <button type="button" id="back" name="back" class="btn btn-primary btn-sm" onClick="back()">
+                            <img src="/icons/back.png" width="ˇ30" height="30"/> Back
+                        </button>
+                        <% if(co == 'blazing'){ %>
+                          <img src="/icons/Logo1n.png" class="center-block logoStyle"/>
+                        <% } %>
+                        &nbsp<br>
+                </div>
 
-            <div class="col-md-12 column" style="margin-top: -10px;">
+                <div  class="col-md-6" style="margin-top: -10px;">
 
-                <h2>Mac:<%= mac%></h2>
-            </div>
+                    <h2>Mac:<%= mac%></h2>
+                </div>
+                <div class="col-md-6" >
 
-            <div class="col-md-12">
-              <div id="chartBlock" class="panel-body">
+                    <!--<input id="chartBtn" type ="button" onclick="changeChartDisplay();" value="Show Chart"></input>-->
+                </div>
 
-                  <div class="panel panel-info">
+                    <div class="easyui-tabs" style="width:99%;height:370px">
+                      <div title="PH" style="padding:10px">
+                        <div id="imgChart1"></div>
+                      </div>
+                      <div title="DO" style="padding:10px">
+                        <div id="imgChart2"></div>
+                      </div>
+                      <div title="COND" style="padding:10px">
+                        <div id="imgChart3"></div>
+                      </div>
+                      <div title="Temperature" style="padding:10px">
+                        <div id="imgChart4"></div>
+                      </div>
+                      <div title="NTU" style="padding:10px">
+                        <div id="imgChart5"></div>
+                      </div>
+                      <div title="Voltage" style="padding:10px">
+                        <div id="imgChart6"></div>
+                      </div>
+                    </div>
 
-                      <div class="panel-body">
-                          <div id="chartTmp" style=t"height:100px;width:400px; "></div>
-                      </div> <!-- panel-body -->
-                  </div> <!-- panel panel-info -->
-              </div> <!-- panel-body -->
-          </div> <!-- col -->
 
-                    <div class="col-md-12 column">
+              <hr>
+
+
+
+                <div class="col-md-12">
