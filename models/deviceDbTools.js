@@ -293,5 +293,21 @@ function isEmpty(obj) {
     return true && JSON.stringify(obj) === JSON.stringify({});
 }
 
+exports.updateDeviceData = function (unitId,json) {
+    console.log('---updateDeviceTime ---------------------------------------');
+    var time = moment().format('YYYY-MM-DD HH:mm:ss');
+    DeviceModel.update({_id : unitId},
+        json,
+        {safe : true, upsert : true},
+        (err, rawResponse)=>{
+            if (err) {
+                console.log(time+' Debug updateDeviceData : '+ err);
+            } else {
+                console.log(time+' Debug updateDeviceData : success');
+            }
+        }
+    );
+};
+
 
 
