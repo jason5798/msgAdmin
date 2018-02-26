@@ -26,7 +26,7 @@ var options1 ={
                         tickOptions:{formatString:'%H:%M'}
                     },
                     yaxis: {
-                        numberTicks: 10
+                        numberTicks: 30
                     }
                 }
             };
@@ -75,35 +75,6 @@ var options3 ={
 
 var options4 ={
                 title: "Temperature",
-                axes:
-                {
-                    xaxis: {
-                        numberTicks: 24,
-                        renderer:$.jqplot.DateAxisRenderer,
-                        tickOptions:{formatString:'%H:%M'}
-                    },
-                    yaxis: {
-                        numberTicks: 10
-                    }
-                }
-            };
-var options5 ={
-                title: "NTU",
-                axes:
-                {
-                    xaxis: {
-                        numberTicks: 24,
-                        renderer:$.jqplot.DateAxisRenderer,
-                        tickOptions:{formatString:'%H:%M'}
-                    },
-                    yaxis: {
-                        numberTicks: 10
-                    }
-                }
-            };
-
-var options6 ={
-                title: "Voltage",
                 axes:
                 {
                     xaxis: {
@@ -214,29 +185,20 @@ function showChart(data){
             break;
         }else{
 
-            phList.push([new Date(data[i][1]).getTime(),data[i][3] ]);
-            doList.push([new Date(data[i][1]).getTime(),data[i][4] ]);
-            condList.push([new Date(data[i][1]).getTime(),data[i][5] ]);
-            tempList.push([new Date(data[i][1]).getTime(),data[i][6] ]);
-            ntuList.push([new Date(data[i][1]).getTime(),data[i][7] ]);
-            volList.push([new Date(data[i][1]).getTime(),data[i][8] ]);
+            phList.push([new Date(data[i][1]).getTime(), Number(data[i][3]) ]);
+            doList.push([new Date(data[i][1]).getTime(), Number(data[i][4]) ] );
+            condList.push([new Date(data[i][1]).getTime(), Number(data[i][5]) ]);
+            tempList.push([new Date(data[i][1]).getTime(), Number(data[i][6]) ]);
         }
-
-        /*if(i<2){
-          alert('data[i] : '+JSON.stringify(data[i]) );
-        alert('data[i][8] : '+data[i][3]);
-        alert('data[i][8] : '+data[i][4]);
-        alert('data[i][8] : '+data[i][5]);
-        alert('data[i][8] : '+data[i][6]);
-        alert('data[i][8] : '+data[i][7]);
-        alert('data[i][8] : '+data[i][8]);
-        }*/
-
     }
-
+    console.log('phList: ' + JSON.stringify(phList));
+    console.log('doList: ' + JSON.stringify(doList));
+    console.log('condList: ' + JSON.stringify(condList));
+    console.log('tempList: ' + JSON.stringify(tempList));
 
     tatalTime = Math.ceil((tempList[tempList.length-1][0]-tempList[0][0])/(1000*60*60))+1;
-    //alert( tatalTime );
+    alert( 'tatalTime : ' + tatalTime );
+    tatalTime = 100;
     if(tatalTime<12){
         x_number = tatalTime;
         formatStr = '%H:%M';
@@ -260,55 +222,38 @@ function showChart(data){
         plot2.destroy();
         plot3.destroy();
         plot4.destroy();
-        plot5.destroy();
-        plot6.destroy();
-
     }
 
     options1.axes.xaxis.numberTicks = x_number;
     options2.axes.xaxis.numberTicks = x_number;
     options3.axes.xaxis.numberTicks = x_number;
     options4.axes.xaxis.numberTicks = x_number;
-    options5.axes.xaxis.numberTicks = x_number;
-    options6.axes.xaxis.numberTicks = x_number;
     options1.axes.xaxis.tickOptions.formatString = formatStr;
     options2.axes.xaxis.tickOptions.formatString = formatStr;
     options3.axes.xaxis.tickOptions.formatString = formatStr;
     options4.axes.xaxis.tickOptions.formatString = formatStr;
-    options5.axes.xaxis.tickOptions.formatString = formatStr;
-    options6.axes.xaxis.tickOptions.formatString = formatStr;
     //Jason add for chart to image on 2017.06.12
 
     plot1 = $.jqplot ('chartPH', [phList],options1);
     plot2 = $.jqplot ('chartDO', [doList],options2);
     plot3 = $.jqplot ('chartCOND', [condList],options3);
     plot4 = $.jqplot ('chartTmp', [tempList],options4);
-    plot5 = $.jqplot ('chartNTU', [ntuList],options5);
-    plot6 = $.jqplot ('chartVol', [volList],options6);
     var imgPHData = $('#chartPH').jqplotToImageStr({});
     var imgPHElem = $('<img/>').attr('src',imgPHData);
     $('#imgChart1').append(imgPHElem);
-    $("#chartPH").hide();
+    //$("#chartPH").hide();
     var imgDOData = $('#chartDO').jqplotToImageStr({});
     var imgDOElem = $('<img/>').attr('src',imgDOData);
     $('#imgChart2').append(imgDOElem);
-    $("#chartDO").hide();
+    //$("#chartDO").hide();
     var imgCONDData = $('#chartCOND').jqplotToImageStr({});
     var imgCONDElem = $('<img/>').attr('src',imgCONDData);
     $('#imgChart3').append(imgCONDElem);
-    $("#chartCOND").hide();
+    //$("#chartCOND").hide();
     var imgTmpData = $('#chartTmp').jqplotToImageStr({});
     var imgTmpElem = $('<img/>').attr('src',imgTmpData);
     $('#imgChart4').append(imgTmpElem);
-    $("#chartTmp").hide();
-    var imgNTUData = $('#chartNTU').jqplotToImageStr({});
-    var imgNTUElem = $('<img/>').attr('src',imgNTUData);
-    $('#imgChart5').append(imgNTUElem);
-    $("#chartNTU").hide();
-    var imgVolData = $('#chartVol').jqplotToImageStr({});
-    var imgVolElem = $('<img/>').attr('src',imgVolData);
-    $('#imgChart6').append(imgVolElem);
-    $("#chartVol").hide();
+    //$("#chartTmp").hide();
 }
 
 function changeChartDisplay(){

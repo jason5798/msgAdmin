@@ -69,43 +69,10 @@ exports.parseMsg = function (msg) {
     }else{
         obj = msg;
     }
-    //Get data attributes
-    mData = obj.data;
-    mType = mData.substring(0,4);
-    mMac  = obj.macAddr;
-    mDate = moment(mRecv).format('YYYY/MM/DD HH:mm:ss');
-    mExtra = obj.extra;
-    if(obj.recv){
-        mRecv = obj.recv;
-    }else
-    {
-        mRecv = obj.time;
-    }
-    mTimestamp = new Date(mRecv).getTime();
-
-
-    //Parse data
-    if(mExtra.fport>0 ){
-        mInfo = parseBlazingMessage(mData,mExtra.fport);
-    }else{
-        if(isSameTagCheck(mType,mMac,msg.recv))
-            return null;
-        if(mType.indexOf('aa')!=-1)
-            mInfo = parseDefineMessage(mData,mType);
-    }
-
-    var msg = {mac:mMac,data:mData,recv:mRecv,date:mDate,extra:mExtra,timestamp:mTimestamp};
-    if(mExtra.fport>0 ){
-        saveBlazingList(mExtra.fport,mMac,msg)
-    }else{
-        finalList[mMac]=msg;
-    }
-
-    if(mInfo){
-        console.log('**** '+msg.date +' mac:'+msg.mac+' => data:'+msg.data+'\ninfo:'+JSON.stringify(mInfo));
-        msg.information=mInfo;
-    }
-
+    if (obj.information ) {
+        finalList[obj.macAddr] = obj;
+        JsonFileTools.saveJsonToFile(path,finalList);
+    } 
     return msg;
 }
 
@@ -143,12 +110,6 @@ exports.getGwIdByMac = function (mac) {
 
 exports.getDevicesData = function (type,devices) {
     var array = [];
-    if(isNeedGWMac){
-        //For blazing
-        if(gwIdMacMapList === undefined || gwIdMacMapList === null){
-            initMap();
-        }
-    }
 
     if(devices){
         for (var i=0;i<devices.length;i++)
@@ -160,9 +121,9 @@ exports.getDevicesData = function (type,devices) {
         }
     }
 
-    var dataString = JSON.stringify(array);
-    if(array.length===0){
-        dataString = null;
+    var dataString = null;
+    if (array.length>0){
+        dataString = JSON.stringify(array);;
     }
     return dataString;
 };
@@ -174,12 +135,12 @@ function getDevicesArray(obj,item,type){
     arr.push(item);
     arr.push(obj.date);
     arr.push(obj.data);
-    arr.push(obj.info.ph);
-    arr.push(obj.info.do);
-    arr.push(obj.info.cond);
-    arr.push(obj.info.temperature);
-    arr.push(obj.info.ntu);
-    arr.push(obj.info.voltage);
+    var keys = Object.keys(obj.information);
+    for (var i=0;i<keys.length;i++)
+    {
+        arr.push(obj.information[keys[i]]);
+    }
+
 
     return arr;
 }

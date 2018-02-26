@@ -183,8 +183,6 @@ function toFindDevice(dateStr,json,dateOption,order,calllback) {
     }
 
     DeviceModel.find(json).sort({ recv:recvOrder}).exec(function(err, Devices){
-       
-
         if (err) {
             console.log('Debug : findDevice err:', err);
             return calllback(err);
@@ -198,7 +196,6 @@ function toFindDevice(dateStr,json,dateOption,order,calllback) {
         }
         return calllback(err,Devices);
     });
-   
 };
 
 exports.getOptioDeviceList = function (devices,option) {

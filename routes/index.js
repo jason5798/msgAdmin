@@ -41,52 +41,39 @@ module.exports = function(app) {
   	    var now = new Date().getTime();
 		var selectObj = JsonFileTools.getJsonFromFile(selectPath);
 	
-		ListDbTools.findByName('finalist',function(err,lists){
-			if(err){
-				res.render('index', { title: 'Index',
-					success: '',
-					error: err.toString(),
-					finalList:null,
-					type:type,
-					isNeedTypeSwitch:settings.isNeedTypeSwitch,
-					co:settings.co
-				});
-			}else{
-                var finalList = lists[0]['list'];
-				var unitObj = JsonFileTools.getJsonFromFile(unitPath);
+		var finalList = JsonFileTools.getJsonFromFile(path);
+		var unitObj = JsonFileTools.getJsonFromFile(unitPath);
 
-				//console.log('finalList :'+JSON.stringify(finalList));
-				if(finalList){
-					var keys = Object.keys(finalList);
-					console.log('Index finalList :'+keys.length);
-					for(var i=0;i<keys.length ;i++){
-						//console.log( i + ') mac : ' + keys[i] +'=>' + JSON.stringify(finalList[keys[i]]));
-						//console.log(i+' result : '+ ((now - finalList[keys[i]].timestamp)/hour));
-						finalList[keys[i]].overtime = true;
-						if( ((now - finalList[keys[i]].timestamp)/hour) < 2 )  {
-							finalList[keys[i]].overtime = false;
-						}
-						finalList[keys[i]].name = '';
-						//console.log(i+' keys[i] : '+ keys[i]);
-						//console.log(i+' unitObj[keys[i]] : '+ unitObj[keys[i]]);
-						if( unitObj[keys[i]] )  {
-							finalList[keys[i]].name = unitObj[keys[i]];
-						}
-					}
-				}else{
-					finalList = null;
+		//console.log('finalList :'+JSON.stringify(finalList));
+		if(finalList){
+			var keys = Object.keys(finalList);
+			console.log('Index finalList :'+keys.length);
+			for(var i=0;i<keys.length ;i++){
+				//console.log( i + ') mac : ' + keys[i] +'=>' + JSON.stringify(finalList[keys[i]]));
+				//console.log(i+' result : '+ ((now - finalList[keys[i]].timestamp)/hour));
+				finalList[keys[i]].overtime = true;
+				if( ((now - finalList[keys[i]].timestamp)/hour) < 2 )  {
+					finalList[keys[i]].overtime = false;
 				}
-
-				res.render('index', { title: 'Index',
-					success: null,
-					error: null,
-					finalList:finalList,
-					type:type,
-					isNeedTypeSwitch:settings.isNeedTypeSwitch,
-					co:settings.co,
-					select:selectObj
-				});
+				finalList[keys[i]].name = '';
+				//console.log(i+' keys[i] : '+ keys[i]);
+				//console.log(i+' unitObj[keys[i]] : '+ unitObj[keys[i]]);
+				if( unitObj[keys[i]] )  {
+					finalList[keys[i]].name = unitObj[keys[i]];
+				}
 			}
+		}else{
+			finalList = null;
+		}
+
+		res.render('index', { title: 'Index',
+			success: null,
+			error: null,
+			finalList:finalList,
+			type:type,
+			isNeedTypeSwitch:settings.isNeedTypeSwitch,
+			co:settings.co,
+			select:selectObj
 		});
   });
 
