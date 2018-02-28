@@ -18,13 +18,14 @@
     <!--  JSCal2-1.7-->
     <script type="text/javascript" src="/vendor/JSCal2-1.7/js/jscal2.js"></script>
     <script type="text/javascript" src="/vendor/JSCal2-1.7/js/lang/b5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
     <!-- Self-define-->
     <% if(title === 'Index' ){ %>
        <script type="text/javascript" src="js/myIndex.js" ></script>
     <% }else if(title === 'Device'){ %>
         <!--  jqplot -->
-        <script type="text/javascript"src="/vendor/jqplot/jquery.jqplot.min.js"></script>
-        <script type="text/javascript" src="/vendor/jqplot/plugins/jqplot.dateAxisRenderer.js"></script>
+        <script type="text/javascript"src="/vendor/Chart.js-2.7.1/Chart.js"></script>
+        <!--<script type="text/javascript"src="/vendor/Chart.js-2.7.1/Chart.js"></script>-->
+        <script type="text/javascript" src="js/utils.js" ></script>
         <script type="text/javascript" src="js/myDevices.js" ></script>
-        <script type="text/javascript" src="/vendor/jquery-easyui-1.5.2/jquery.easyui.min.js"></script>
     <% } %>

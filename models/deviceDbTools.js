@@ -226,43 +226,15 @@ exports.getOptioDeviceList = function (devices,option) {
 
 
 
-exports.removeDevicesByDate = function (startDate,option,number,calllback) {
+exports.removeDevices = function (json,calllback) {
     //console.log('--removeDevicesByDate---------------------------------------');
-
-    var now = moment(startDate).toDate();
-    var from;
-    switch(option) {
-    case 0:
-        from =  moment(startDate).subtract(number,'hours').toDate();
-        break;
-    case 1:
-        from =  moment(startDate).subtract(number,'days').toDate();
-        break;
-    case 2:
-        from =  moment(startDate).subtract(number,'weeks').toDate();
-        break;
-    case 3:
-        from =  moment(startDate).subtract(number,'months').toDate();
-        break;
-    default:
-        from =  moment(startDate).subtract(number,'days').toDate();
-    }
-    //console.log( 'now :'+now );
-    //console.log( 'from :'+from );
-
-    var json = {
-                recv:{
-                    $gte:from,
-                    $lt:now
-                }
-        }
 
     DeviceModel.remove(json,(err, Devices) => {
         if (err) {
-            console.log(now+'Debug : findDevice err:', err);
+            console.log('Debug : findDevice err:', err);
             return calllback(err);
         } else {
-            console.log(now+'Debug :findDevice success\n:',Devices.length);
+            console.log('Debug :findDevice success\n:',Devices.length);
             return calllback(err,Devices);
         }
     });

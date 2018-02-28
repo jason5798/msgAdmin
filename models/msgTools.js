@@ -68,11 +68,13 @@ exports.parseMsg = function (msg) {
 		}
     }else{
         obj = msg;
+        if (obj.extra.fport === 5 || obj.extra.fport === 6) {
+            var finalList = JsonFileTools.getJsonFromFile(path);
+            finalList[obj.macAddr] = obj;
+            JsonFileTools.saveJsonToFile(path,finalList);
+        } 
     }
-    if (obj.information ) {
-        finalList[obj.macAddr] = obj;
-        JsonFileTools.saveJsonToFile(path,finalList);
-    } 
+    
     return msg;
 }
 

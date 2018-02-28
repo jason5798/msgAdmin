@@ -1,42 +1,28 @@
 <%- include extend/header_device.ejs %>
-
+    <div class="wrapper" >
+		<canvas id="canvas" width="1000px" height="500px"></canvas>
+	</div>
+	<div>
+		<button id="randomizeData">Randomize Data</button>
+		<button id="addDataset">Add Dataset</button>
+		<button id="removeDataset">Remove Dataset</button>
+		<button id="addData">Add Data</button>
+		<button id="removeData">Remove Data</button>
+	</div>
 	<table id="table1"  class="display" cellspacing="0" width="100%">
 		<thead>
             <tr style="color:#428bca">
 	            <th>Item</th>
 	            <th>Receive time</th>
 	            <th>Data</th>
-				      <th>溫度1</th>
-	            <th>濕度1</th>
-	            <th>溫度2</th>
-	            <th>濕度2</th>
+
+	            <% for(var i=0; i< fields.length;i++) { %>
+	            	<th>
+	            		<%= fields[i] %>
+	            	</th>
+	            <% } %>
             </tr>
         </thead>
-        <% if(devices != null && devices.length >0){ %>
-
-		<tbody>
-
-			<% for(var i=0;i<length ;i++){ %>
-				<tr>
-					<td><%= (1) %></td>
-					<td><%= devices[i].date%></td>
-					<td><%= devices[i].data%></td>
-
-					<th>
-						<% if(devices[i].information.t3){ %>
-							<%= devices[i].information.t2%>
-						<% } %>
-					</th>
-		            <th>
-						<% if(devices[i].information.h3){ %>
-							<%= devices[i].information.h2%>
-						<% } %>
-					</th>
-	            </tr>
-	        <% } %>
-		</tbody>
-
-	<% } %>
 	</table>
 	<input type="hidden" id="mac" name="mac" value="<%= mac%>">
 	<input type="hidden" id="type" name="type" value="<%= type%>">
@@ -44,31 +30,5 @@
 	<input type="hidden" id="option" name="option" value="<%= option%>">
 
 	<HR size="10">
-	<div id="chart1" class="col-md-6" style="margin-top: -10px;">
 
-        <h2>&nbsp;</h2>
-    </div>
-    <div  class="col-md-6" >
-
-        <input type ="button" onclick="javascript:location.href='#wrapper'" value="Table"></input>
-    </div>
-    <br>
-
-	<div id="t1" style="padding:10px">
-      <div id="chartPH"></div>
-      </div> <!-- PH-tabs -->
-      <div id="imgChart1"></div>
-
-      <div id="h1" style="padding:10px">
-        <div id="chartDO"></div>
-      </div> <!-- DO-tabs -->
-
-      <div id="t2" style="padding:10px">
-        <div id="chartCOND"></div>
-      </div> <!-- COND-tabs -->
-
-      <div id="h2" style="padding:10px">
-        <div id="chartTmp"></div>
-      </div> <!-- Temperature-tabs -->
-    </div>
 <%- include extend/footer %>

@@ -3,7 +3,7 @@ module.exports = {
   co:'gemteks',
   dbhost: 'localhost',
   dbport: 27017,
-  dbpath: 'mongodb://localhost/agritest',
+  dbpath: 'mongodb://localhost/agri',
   myport: 1884,
   mytopic:'mqtt',
   gIotHost:'52.193.146.103',

@@ -11,6 +11,8 @@ var unitPath = './public/data/unit.json';
 var selectPath = './public/data/select.json';
 var hour = 60*60*1000;
 var type = 'gps';
+var async  = require('async');
+var mongoMap = require('../models/mongoMap.js');
 
 function findUnitsAndShowSetting(req,res,isUpdate){
 	UnitDbTools.findAllUnits(function(err,units){
@@ -79,37 +81,46 @@ module.exports = function(app) {
 
   app.get('/devices', function (req, res) {
 	var mac = req.query.mac;
-	var type = req.query.type;
+	var finalList = JsonFileTools.getJsonFromFile(path);
+	var obj = finalList[mac];
+	var type = obj.extra.fport+'';
 	var date = req.query.date;
 	var option = req.query.option;
 	req.session.type = type;
-	DeviceDbTools.findDevicesByDate(date,mac,Number(0),'desc',function(err,devices){
-		if(err){
-			console.log('find name:'+find_mac);
-			return;
+	var json = {'deviceType': type};
+	async.waterfall([
+		function(next){
+			mongoMap.find(json).then(function(data) {
+				// on fulfillment(已實現時)
+				console.log(JSON.stringify(data));
+				next(null, data[0]);
+			}, function(reason) {
+				// on rejection(已拒絕時)
+				next(reason, null);
+			});
 		}
-		var length = 15;
-		if(devices.length<length){
-			length = devices.length;
+	], function(err, rest){
+		var fields = [];
+		if(err) {
+			fields = null;
+		} else {
+		  var fieldObj = rest.fieldName;
+		  var keys = Object.keys(fieldObj);
+		  for (var i=0;i<keys.length;i++) {
+			fields.push(fieldObj[keys[i]]);
+		  }
 		}
-
-		/*devices.forEach(function(device) {
-			console.log('mac:'+device.date + ', data :' +device.data);
-		});*/
-
+		
 		res.render('devices', { title: 'Device',
-			devices: devices,
-			success: req.flash('success').toString(),
-			error: req.flash('error').toString(),
+			fields: fields,
 			type:req.session.type,
 			mac:mac,
 			date:date,
 			option:option,
-			length:length,
-			isNeedTypeSwitch:settings.isNeedTypeSwitch,
-			co:settings.co
-		});
+			isNeedTypeSwitch:settings.isNeedTypeSwitch
+		}); 	    
 	});
+	
   });
 
   app.get('/setting', function (req, res) {
