@@ -1,139 +1,28 @@
 <%- include extend/header_device.ejs %>
-
+    <div class="wrapper" >
+		<canvas id="canvas" width="1000px" height="500px"></canvas>
+	</div>
+	<div>
+		<button id="randomizeData">Randomize Data</button>
+		<button id="addDataset">Add Dataset</button>
+		<button id="removeDataset">Remove Dataset</button>
+		<button id="addData">Add Data</button>
+		<button id="removeData">Remove Data</button>
+	</div>
 	<table id="table1"  class="display" cellspacing="0" width="100%">
 		<thead>
             <tr style="color:#428bca">
 	            <th>Item</th>
 	            <th>Receive time</th>
 	            <th>Data</th>
-<!-- For blazing -->
-            <% if(co === 'blazing'){ %>
-	            <% if(type === 'pir'){ %>
-					<th>Trigger</th>
-				<% }else if(type === 'gps'){ %>
-					<th>Latitude</th>
-					<th>Longitude</th>
-				<% }else if(type === 'pm25'){ %>
-					<th>Value</th>
-					<th>BATL</th>
-				<% }else if(type === 'flood'){ %>
-					<th>Trigger</th>
-					<th>BATL</th>
-				<% } %>
-	            <th>PH</th>
-	            <th>SNR</th>
-	            <th>SF</th>
-	            <th>Channel</th>
-	            <th>ApId</th>
-				<th>ApMac</th>
-				<th>Frame</th>
-<!-- For 惟一 -->
-			<% }else { %>
-				<th>PH</th>
-	            <th>DO</th>
-	            <th>COND</th>
-	            <th>Temperature</th>
-	            <th>NTU</th>
-				<th>BATL</th>
-			<% } %>
+
+	            <% for(var i=0; i< fields.length;i++) { %>
+	            	<th>
+	            		<%= fields[i] %>
+	            	</th>
+	            <% } %>
             </tr>
         </thead>
-        <% if(devices != null && devices.length >0){ %>
-
-		<tbody>
-
-			<% for(var i=0;i<length ;i++){ %>
-				<tr>
-					<td><%= i+1%></td>
-					<td><%= devices[i].date%></td>
-					<td><%= devices[i].data%></td>
-<!-- For blazing -->
-            	<% if(co === 'blazing'){ %>
-					<% if(devices[i].info != undefined){ %>
-
-						<% if(type === 'pir'){ %>
-							<% if(devices[i].info.trigger != undefined && devices[i].info.trigger != 9  ){ %>
-								<td><%= devices[i].info.trigger %></td>
-							<% }else{ %>
-								<td>X</td>
-							<% } %>
-						<% }else if(type === 'gps'){ %>
-
-							<% if(devices[i].info.GPS_N  != undefined && devices[i].info.GPS_N != 9  ){ %>
-								<td><%= devices[i].info.GPS_N %></td>
-							<% }else{ %>
-								<td>X</td>
-							<% } %>
-							<% if(devices[i].info.GPS_E  != undefined && devices[i].info.GPS_E != 9  ){ %>
-								<td><%= devices[i].info.GPS_E %></td>
-							<% }else{ %>
-								<td>X</td>
-							<% } %>
-
-						<% }else if(type === 'pm25'){ %>
-
-							<% if(devices[i].info.value  != undefined && devices[i].info.value != 9  ){ %>
-								<td><%= devices[i].info.value %></td>
-							<% }else{ %>
-								<td>X</td>
-							<% } %>
-							<% if(devices[i].info.BATL  != undefined && devices[i].info.BATL != 9  ){ %>
-								<td><%= devices[i].info.BATL%></td>
-							<% }else{ %>
-								<td>X</td>
-							<% } %>
-
-						<% }else if(type === 'flood'){ %>
-
-							<% if(devices[i].info.trigger  != undefined && devices[i].info.trigger != 9  ){ %>
-								<td><%= devices[i].info.trigger %></td>
-							<% }else{ %>
-								<td>X</td>
-							<% } %>
-							<% if(devices[i].info.BATL  != undefined && devices[i].info.BATL != 9  ){ %>
-								<td><%= devices[i].info.BATL%></td>
-							<% }else{ %>
-								<td>X</td>
-							<% } %>
-
-						<% } %>
-
-
-
-					<% }else{ %>
-						<% if(type === 'pir'){ %>
-
-							<td>X</td>
-
-						<% } else if(type != 'others'){ %>
-
-							<td>X</td>
-							<td>X</td>
-
-						<% } %>
-					<% } %>
-					<td><%= devices[i].extra.rssi%></td>
-					<td><%= devices[i].extra.snr%></td>
-					<td><%= devices[i].extra.sf%></td>
-					<td><%= devices[i].extra.channel%></td>
-					<td><%= devices[i].extra.gwid%></td>
-					<td></td>
-					<td><%= devices[i].extra.frameCnt%></td>
-
-<!-- For 惟一 -->
-				<% }else { %>
-					<th><%= devices[i].info.ph%></th>
-		            <th><%= devices[i].info.do%></th>
-		            <th><%= devices[i].info.cond%></th>
-		            <th><%= devices[i].info.temperature%></th>
-		            <th><%= devices[i].info.ntu%></th>
-					<th><%= devices[i].info.voltage%></th>
-				<% } %>
-	            </tr>
-	        <% } %>
-		</tbody>
-
-	<% } %>
 	</table>
 	<input type="hidden" id="mac" name="mac" value="<%= mac%>">
 	<input type="hidden" id="type" name="type" value="<%= type%>">
@@ -141,39 +30,5 @@
 	<input type="hidden" id="option" name="option" value="<%= option%>">
 
 	<HR size="10">
-	<div id="chart1" class="col-md-6" style="margin-top: -10px;">
 
-        <h2>&nbsp;</h2>
-    </div>
-    <div  class="col-md-6" >
-
-        <input type ="button" onclick="javascript:location.href='#wrapper'" value="Table"></input>
-    </div>
-    <br>
-
-	<div id="PH" style="padding:10px">
-      <div id="chartPH"></div>
-      </div> <!-- PH-tabs -->
-      <div id="imgChart1"></div>
-
-      <div id="DO" style="padding:10px">
-        <div id="chartDO"></div>
-      </div> <!-- DO-tabs -->
-
-      <div id="COND" style="padding:10px">
-        <div id="chartCOND"></div>
-      </div> <!-- COND-tabs -->
-
-      <div id="Temperature" style="padding:10px">
-        <div id="chartTmp"></div>
-      </div> <!-- Temperature-tabs -->
-
-      <div id="NTU" style="padding:10px">
-        <div id="chartNTU" ></div>
-      </div> <!-- NTU-tabs -->
-
-      <div id="Voltage" style="padding:10px">
-        <div id="chartVol"></div>
-      </div> <!-- Voltage-tabs -->
-    </div>
 <%- include extend/footer %>

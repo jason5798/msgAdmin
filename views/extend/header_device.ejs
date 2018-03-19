@@ -18,10 +18,6 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <% if(co == 'gemteks'){ %>
-                <a class="navbar-brand" href="/tools">Device admin</a>
-                <% } %>
-
             </div>
 
         </nav>
@@ -53,9 +49,6 @@
                       <button type="button" id="back" name="back" class="btn btn-primary btn-sm" onClick="back()">
                             <img src="/icons/back.png" width="ˇ30" height="30"/> Back
                         </button>
-                        <% if(co == 'blazing'){ %>
-                          <img src="/icons/Logo1n.png" class="center-block logoStyle"/>
-                        <% } %>
                         &nbsp<br>
                 </div>
 
@@ -63,33 +56,6 @@
 
                     <h2>Mac:<%= mac%></h2>
                 </div>
-                <div class="col-md-6" >
-
-                    <!--<input id="chartBtn" type ="button" onclick="changeChartDisplay();" value="Show Chart"></input>-->
-                </div>
-
-                    <div class="easyui-tabs" style="width:99%;height:370px">
-                      <div title="PH" style="padding:10px">
-                        <div id="imgChart1"></div>
-                      </div>
-                      <div title="DO" style="padding:10px">
-                        <div id="imgChart2"></div>
-                      </div>
-                      <div title="COND" style="padding:10px">
-                        <div id="imgChart3"></div>
-                      </div>
-                      <div title="Temperature" style="padding:10px">
-                        <div id="imgChart4"></div>
-                      </div>
-                      <div title="NTU" style="padding:10px">
-                        <div id="imgChart5"></div>
-                      </div>
-                      <div title="Voltage" style="padding:10px">
-                        <div id="imgChart6"></div>
-                      </div>
-                    </div>
-
-
               <hr>
 
 

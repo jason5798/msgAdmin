@@ -84,14 +84,14 @@ router.route('/devices/:mac')
 
 	// delete the bear with this id
 	.delete(function(req, res) {
-		/*Bear.remove({
-			_id: req.params.bear_id
-		}, function(err, bear) {
+		var json = {macAddr:req.params.mac};
+		var from = new Date(req.body.date);
+		json.recv = {$lt:from};
+		DeviceDbTools.removeDevices(json, function(err, devices) {
 			if (err)
-				res.send(err);
-
-			res.json({ message: 'Successfully deleted' });
-		});*/
+				return res.send(err);
+			return res.json(devices);
+		});
 	});
 
 router.route('/lists')
